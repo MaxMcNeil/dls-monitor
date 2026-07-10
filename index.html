@@ -3,73 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Command Center - Vertical Live Feed</title>
+    <title>Cyber Command Center - Dynamic Vertical Live Matrix</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; }
         
         body {
-            margin: 0; padding: 0; background-color: #050b09;
+            margin: 0; padding: 0; background-color: #020504; 
             color: #00ff9c; font-family: 'Courier New', Courier, monospace;
             width: 1080px; height: 1920px; overflow: hidden;
-            border: 6px solid #00ff9c;
+            border: 8px solid #00ff9c;
         }
         
-        /* Message de Neutralité Permanent Obligatoire (YouTube Policy) */
+        /* Bannière de Neutralité Permanente Obligatoire - Contraste Maximal */
         .policy-ticker {
-            background: #ffaa00; color: #000; font-weight: bold; padding: 18px;
-            font-size: 20px; text-align: center; text-transform: uppercase;
-            border-bottom: 3px solid #00ff9c;
-            letter-spacing: 1px;
+            background: #ffaa00; color: #000000; font-weight: 900; padding: 20px;
+            font-size: 22px; text-align: center; text-transform: uppercase;
+            border-bottom: 4px solid #00ff9c; letter-spacing: 1px;
+            line-height: 1.3;
         }
 
-        /* Style War Room Élite */
+        /* En-tête War Room */
         .header {
-            background-color: #0c1a14; padding: 35px 20px; text-align: center;
-            border-bottom: 3px solid #00ff9c; letter-spacing: 4px;
-            box-shadow: inset 0 0 20px rgba(0, 255, 156, 0.1);
+            background-color: #060f0b; padding: 35px 20px; text-align: center;
+            border-bottom: 4px solid #00ff9c; letter-spacing: 4px;
         }
-        .header h1 { margin: 0; font-size: 36px; text-shadow: 0 0 15px #00ff9c; font-weight: 900; }
+        .header h1 { margin: 0; font-size: 40px; text-shadow: 0 0 15px #00ff9c; font-weight: 900; }
         
+        /* Zone de défilement ventilée pour 4 alertes maximum */
         .alert-container {
-            padding: 40px; height: 1650px; overflow-y: hidden; display: block;
+            padding: 40px; height: 1300px; overflow: hidden; display: block;
+            position: relative;
         }
 
-        /* Design Shock Command Center pour les cartes de cyber-alertes */
+        /* Cartes d'incident - Optimisées pour l'accessibilité des malvoyants */
         .alert-card {
-            background: rgba(12, 26, 20, 0.95); 
-            border: 2px solid rgba(0, 255, 156, 0.2);
-            border-left: 10px solid #ff0055;
-            padding: 30px; margin-bottom: 35px; border-radius: 4px; 
-            animation: pulseAlert 2s infinite alternate, entryPopup 0.5s ease-out;
-            box-shadow: 0 0 25px rgba(255, 0, 85, 0.15);
+            background: #091410; 
+            border: 3px solid #00ff9c; 
+            border-left: 14px solid #ff0055; 
+            padding: 30px; margin-bottom: 30px; border-radius: 6px; 
+            transition: all 0.6s ease-in-out;
+            box-shadow: 0 0 25px rgba(0, 255, 156, 0.1);
         }
         
         .alert-meta { 
-            display: table; width: 100%; font-size: 22px; margin-bottom: 15px; 
+            display: table; width: 100%; font-size: 24px; margin-bottom: 15px; 
             color: #ff0055; font-weight: bold; letter-spacing: 2px;
         }
         .meta-hacker { display: table-cell; text-align: left; }
         .meta-time { display: table-cell; text-align: right; color: #ffaa00; }
         
         .alert-target { 
-            font-size: 32px; color: #ffffff; margin-bottom: 15px; 
-            font-weight: bold; text-shadow: 0 0 5px rgba(255,255,255,0.2);
+            font-size: 36px; color: #ffffff; margin-bottom: 15px; 
+            font-weight: bold; text-shadow: 0 0 8px rgba(255,255,255,0.4);
         }
         .alert-details { 
-            font-size: 21px; color: #a3b8b0; line-height: 1.5; 
-            background: rgba(0,0,0,0.3); padding: 15px; border-radius: 4px;
-            border: 1px id #0c1a14;
+            font-size: 24px; color: #ffffff; line-height: 1.6; 
+            background: #000000; padding: 18px; border-radius: 4px;
+            border: 2px solid #142820;
         }
 
-        /* Animations Shock Éternelles */
-        @keyframes pulseAlert {
-            from { border-left-color: #ff0055; box-shadow: 0 0 15px rgba(255, 0, 85, 0.1); }
-            to { border-left-color: #aa0038; box-shadow: 0 0 30px rgba(255, 0, 85, 0.3); }
+        /* ZONE DU POPUP FLASH RADAR (CADRE DE ROTATION INFINE) */
+        .radar-popup-zone {
+            height: 300px; padding: 0 40px; display: flex; align-items: center; justify-content: center;
+            background: #060f0b; border-top: 4px solid #00ff9c; position: relative;
         }
-        
-        @keyframes entryPopup {
-            from { transform: scale(0.95); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+
+        .radar-card {
+            background: #1a000a; border: 4px solid #ff0055; padding: 20px; width: 100%;
+            border-radius: 8px; text-align: center;
+            animation: zoomInOut 2s infinite ease-in-out;
+            box-shadow: 0 0 40px rgba(255, 0, 85, 0.5);
+        }
+        .radar-title { font-size: 26px; color: #ff0055; font-weight: bold; margin-bottom: 5px; letter-spacing: 3px; }
+        .radar-body { font-size: 34px; color: #ffffff; font-weight: bold; }
+
+        /* Animation Zoom/Dezoom Éternelle */
+        @keyframes zoomInOut {
+            0% { transform: scale(0.96); box-shadow: 0 0 20px rgba(255, 0, 85, 0.3); }
+            50% { transform: scale(1.04); box-shadow: 0 0 50px rgba(255, 0, 85, 0.7); }
+            100% { transform: scale(0.96); box-shadow: 0 0 20px rgba(255, 0, 85, 0.3); }
         }
     </style>
 </head>
@@ -81,70 +93,93 @@
     
     <div class="header">
         <h1>[ CYBER INTELLIGENCE COMMAND CENTER ]</h1>
-        <div style="font-size: 20px; margin-top: 12px; color:#a3b8b0; font-weight: bold;">📊 STABILIZED LIVE FEED // STATUS: ACTIVE REFRESH</div>
+        <div style="font-size: 22px; margin-top: 12px; color:#a3b8b0; font-weight: bold;">📊 DYNAMIC LIVE MATRIX // AUTOMATIC SCROLL ACTIVE</div>
     </div>
 
-    <div class="alert-container" id="feed">
-        </div>
+    <div class="alert-container" id="feed"></div>
 
-    <audio id="beep-sound" src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" preload="auto"></audio>
+    <div class="radar-popup-zone">
+        <div class="radar-card" id="radar-popup">
+            <div class="radar-title">🚨 RADAR FOCUS ACTIVE</div>
+            <div class="radar-body" id="radar-target">ATTENTE DE DONNÉES...</div>
+        </div>
+    </div>
+
+    <audio id="beep-special" src="https://actions.google.com/sounds/v1/alarms/mechanical_clock_ring_in_distance.ogg" preload="auto"></audio>
 
     <script>
-        let lastTimestamp = "";
-        const audio = document.getElementById('beep-sound');
+        let allAlerts = [];
+        let currentIndex = 0;
+        const container = document.getElementById('feed');
+        const radarTarget = document.getElementById('radar-target');
+        const audioSpecial = document.getElementById('beep-special');
+        
+        audioSpecial.volume = 0.15; // Volume discret ajustable pour le live continu
 
-        async function updateDashboard() {
+        async function fetchNewData() {
             try {
-                // CORRECTION REQUIS : Suppression de la variable brisée 'f' pour rétablir le cache-busting fonctionnel
                 const res = await fetch('./live-feed.json?t=' + new Date().getTime());
                 const data = await res.json();
-                
-                if (data.length > 0) {
-                    // Si c'est la toute première fois ou s'il y a une mise à jour d'alerte fraîche
-                    if (data[0].time !== lastTimestamp) {
-                        
-                        // Déclencher le BIP sonore si ce n'est pas le premier chargement de la page
-                        if (lastTimestamp !== "") {
-                            audio.currentTime = 0;
-                            audio.play().catch(e => console.log("Audio en attente d'interaction utilisateur ou OBS"));
-                        }
-                        
-                        lastTimestamp = data[0].time;
-                        
-                        // Génération des popups dynamiques
-                        const container = document.getElementById('feed');
-                        container.innerHTML = "";
-                        
-                        // On limite à 4 cartes à la fois pour éviter l'overflow vertical (1920px maximum)
-                        data.slice(0, 4).forEach(item => {
-                            const card = document.createElement('div');
-                            card.className = 'alert-card';
-                            
-                            // Séparation propre de la date brute
-                            let displayTime = item.time ? item.time.split('.')[0] : "REAL-TIME";
-                            
-                            card.innerHTML = `
-                                <div class="alert-meta">
-                                    <div class="meta-hacker">▲ ACTEUR: ${item.hacker}</div>
-                                    <div class="meta-time">${displayTime}</div>
-                                </div>
-                                <div class="alert-target">CIBLE EXFILTRÉE : ${item.target}</div>
-                                <div class="alert-details">${item.details}</div>
-                            `;
-                            container.appendChild(card);
-                        });
-                    }
+                if (data && data.length > 0) {
+                    allAlerts = data;
                 }
-            } catch (e) { 
-                console.error("Erreur de synchronisation avec le dépôt", e); 
+            } catch (e) {
+                console.error("Erreur de synchronisation", e);
             }
         }
 
-        // Rafraîchissement automatique toutes les 30 secondes pour capter les mises à jour sans clignotement
-        setInterval(updateDashboard, 30000);
-        
-        // Exécution immédiate au démarrage initial d'OBS
-        updateDashboard();
+        function rotateAlerts() {
+            if (allAlerts.length === 0) return;
+
+            container.innerHTML = "";
+            
+            // CORRECTION FLUX FLUIDE : On affiche un maximum de 4 éléments, ou moins si le fichier contient moins de 4 alertes
+            let itemsToShow = Math.min(4, allAlerts.length);
+            
+            for (let i = 0; i < itemsToShow; i++) {
+                // Utilisation du modulo dynamique basé sur la longueur réelle trouvée (allAlerts.length)
+                let index = (currentIndex + i) % allAlerts.length;
+                let item = allAlerts[index];
+                
+                const card = document.createElement('div');
+                card.className = 'alert-card';
+                let displayTime = item.time ? item.time.split('.')[0] : "REAL-TIME";
+                
+                card.innerHTML = `
+                    <div class="alert-meta">
+                        <div class="meta-hacker">▲ ACTEUR: ${item.hacker}</div>
+                        <div class="meta-time">${displayTime}</div>
+                    </div>
+                    <div class="alert-target">CIBLE DÉTECTÉE : ${item.target}</div>
+                    <div class="alert-details">${item.details}</div>
+                `;
+                container.appendChild(card);
+            }
+
+            // Met à jour la cible dans le popup zoom éternel du bas
+            let currentRadarItem = allAlerts[currentIndex];
+            radarTarget.innerText = currentRadarItem.target;
+            
+            // Déclenche le signal sonore d'alerte radar à chaque décalage
+            audioSpecial.currentTime = 0;
+            audioSpecial.play().catch(() => {});
+
+            // Incrémentation glissante indexée sur le volume réel total détecté
+            currentIndex = (currentIndex + 1) % allAlerts.length;
+        }
+
+        async function init() {
+            await fetchNewData();
+            rotateAlerts();
+            
+            // Boucle de rotation infinie toutes les 8 secondes (Ajusté pour laisser le temps de lire)
+            setInterval(rotateAlerts, 8000);
+            
+            // Vérification asynchrone des fichiers du dépôt en arrière-plan (Toutes les 30 secondes)
+            setInterval(fetchNewData, 30000);
+        }
+
+        window.onload = init;
     </script>
 </body>
 </html>
