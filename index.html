@@ -5,61 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cyber Command Center - Vertical Live Feed</title>
     <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        
         body {
             margin: 0; padding: 0; background-color: #050b09;
             color: #00ff9c; font-family: 'Courier New', Courier, monospace;
             width: 1080px; height: 1920px; overflow: hidden;
-            border: 4px solid #00ff9c; box-sizing: border-box;
+            border: 6px solid #00ff9c;
         }
-        /* Style War Room */
-        .header {
-            background-color: #0c1a14; padding: 30px; text-align: center;
-            border-bottom: 2px solid #00ff9c; letter-spacing: 4px;
-        }
-        .header h1 { margin: 0; font-size: 38px; text-shadow: 0 0 10px #00ff9c; }
         
-        /* Bannière obligatoire YouTube Policy */
+        /* Message de Neutralité Permanent Obligatoire (YouTube Policy) */
         .policy-ticker {
-            background: #ffaa00; color: #000; font-weight: bold; padding: 15px;
+            background: #ffaa00; color: #000; font-weight: bold; padding: 18px;
             font-size: 20px; text-align: center; text-transform: uppercase;
+            border-bottom: 3px solid #00ff9c;
+            letter-spacing: 1px;
         }
 
+        /* Style War Room Élite */
+        .header {
+            background-color: #0c1a14; padding: 35px 20px; text-align: center;
+            border-bottom: 3px solid #00ff9c; letter-spacing: 4px;
+            box-shadow: inset 0 0 20px rgba(0, 255, 156, 0.1);
+        }
+        .header h1 { margin: 0; font-size: 36px; text-shadow: 0 0 15px #00ff9c; font-weight: 900; }
+        
         .alert-container {
-            padding: 40px; height: 1550px; overflow-y: hidden; display: flex; flex-direction: column; gap: 30px;
+            padding: 40px; height: 1650px; overflow-y: hidden; display: block;
         }
 
-        /* Design des Popups d'alerte */
+        /* Design Shock Command Center pour les cartes de cyber-alertes */
         .alert-card {
-            background: rgba(12, 26, 20, 0.8); border-left: 8px solid #ff0055;
-            padding: 25px; border-radius: 4px; animation: blinkBorder 1.5s infinite alternate;
-            box-shadow: 0 0 15px rgba(255, 0, 85, 0.2);
+            background: rgba(12, 26, 20, 0.95); 
+            border: 2px solid rgba(0, 255, 156, 0.2);
+            border-left: 10px solid #ff0055;
+            padding: 30px; margin-bottom: 35px; border-radius: 4px; 
+            animation: pulseAlert 2s infinite alternate, entryPopup 0.5s ease-out;
+            box-shadow: 0 0 25px rgba(255, 0, 85, 0.15);
         }
-        .alert-meta { display: flex; justify-content: space-between; font-size: 22px; margin-bottom: 15px; color: #ff0055; font-weight: bold; }
-        .alert-target { font-size: 32px; color: #ffffff; margin-bottom: 10px; font-weight: bold;}
-        .alert-details { font-size: 22px; color: #a3b8b0; line-height: 1.4; }
+        
+        .alert-meta { 
+            display: table; width: 100%; font-size: 22px; margin-bottom: 15px; 
+            color: #ff0055; font-weight: bold; letter-spacing: 2px;
+        }
+        .meta-hacker { display: table-cell; text-align: left; }
+        .meta-time { display: table-cell; text-align: right; color: #ffaa00; }
+        
+        .alert-target { 
+            font-size: 32px; color: #ffffff; margin-bottom: 15px; 
+            font-weight: bold; text-shadow: 0 0 5px rgba(255,255,255,0.2);
+        }
+        .alert-details { 
+            font-size: 21px; color: #a3b8b0; line-height: 1.5; 
+            background: rgba(0,0,0,0.3); padding: 15px; border-radius: 4px;
+            border: 1px id #0c1a14;
+        }
 
-        @keyframes blinkBorder {
-            from { border-left-color: #ff0055; }
-            to { border-left-color: #050b09; }
+        /* Animations Shock Éternelles */
+        @keyframes pulseAlert {
+            from { border-left-color: #ff0055; box-shadow: 0 0 15px rgba(255, 0, 85, 0.1); }
+            to { border-left-color: #aa0038; box-shadow: 0 0 30px rgba(255, 0, 85, 0.3); }
+        }
+        
+        @keyframes entryPopup {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
 <body>
 
     <div class="policy-ticker">
-        INFO-VEILLE COMPATIBLE : SENSIBILISATION NEUTRE AUX MENACES INFORMATIQUES GLOBALES
+        Avertissement : Ce flux contribue exclusivement au débat public et à la sensibilisation neutre face aux cybermenaces. Nous ne soutenons ni ne validons aucune entité mentionnée.
     </div>
     
     <div class="header">
         <h1>[ CYBER INTELLIGENCE COMMAND CENTER ]</h1>
-        <div style="font-size: 20px; margin-top: 10px; color:#a3b8b0;">STABILIZED LIVE FEED // FEED: REFRESH AUTOMATIC</div>
+        <div style="font-size: 20px; margin-top: 12px; color:#a3b8b0; font-weight: bold;">📊 STABILIZED LIVE FEED // STATUS: ACTIVE REFRESH</div>
     </div>
 
     <div class="alert-container" id="feed">
-        <!-- Les cartes d'alertes s'injecteront ici automatiquement -->
-    </div>
+        </div>
 
-    <!-- Son d'alerte éternel lors de l'apparition d'un nouveau log -->
     <audio id="beep-sound" src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" preload="auto"></audio>
 
     <script>
@@ -68,39 +95,56 @@
 
         async function updateDashboard() {
             try {
-                // Charge le fichier généré par ta GitHub Action
-                const res = await fetch('./live-feed.json?t=' + f = new Date().getTime());
+                // CORRECTION REQUIS : Suppression de la variable brisée 'f' pour rétablir le cache-busting fonctionnel
+                const res = await fetch('./live-feed.json?t=' + new Date().getTime());
                 const data = await res.json();
                 
-                if(data.length > 0 && data[0].time !== lastTimestamp) {
-                    lastTimestamp = data[0].time;
-                    // Joue le bip d'alerte
-                    audio.play().catch(e => console.log("Audio en attente d'interaction"));
-                    
-                    // Rendu des popups
-                    const container = document.getElementById('feed');
-                    container.innerHTML = "";
-                    data.forEach(item => {
-                        const card = document.createElement('div');
-                        card.className = 'alert-card';
-                        card.innerHTML = `
-                            <div class="alert-meta">
-                                <span>ACTEUR: ${item.hacker}</span>
-                                <span>${item.time.split('.')[0]}</span>
-                            </div>
-                            <div class="alert-target">CIBLE EXFILTRÉE : ${item.target}</div>
-                            <div class="alert-details">${item.details}</div>
-                        `;
-                        container.appendChild(card);
-                    });
+                if (data.length > 0) {
+                    // Si c'est la toute première fois ou s'il y a une mise à jour d'alerte fraîche
+                    if (data[0].time !== lastTimestamp) {
+                        
+                        // Déclencher le BIP sonore si ce n'est pas le premier chargement de la page
+                        if (lastTimestamp !== "") {
+                            audio.currentTime = 0;
+                            audio.play().catch(e => console.log("Audio en attente d'interaction utilisateur ou OBS"));
+                        }
+                        
+                        lastTimestamp = data[0].time;
+                        
+                        // Génération des popups dynamiques
+                        const container = document.getElementById('feed');
+                        container.innerHTML = "";
+                        
+                        // On limite à 4 cartes à la fois pour éviter l'overflow vertical (1920px maximum)
+                        data.slice(0, 4).forEach(item => {
+                            const card = document.createElement('div');
+                            card.className = 'alert-card';
+                            
+                            // Séparation propre de la date brute
+                            let displayTime = item.time ? item.time.split('.')[0] : "REAL-TIME";
+                            
+                            card.innerHTML = `
+                                <div class="alert-meta">
+                                    <div class="meta-hacker">▲ ACTEUR: ${item.hacker}</div>
+                                    <div class="meta-time">${displayTime}</div>
+                                </div>
+                                <div class="alert-target">CIBLE EXFILTRÉE : ${item.target}</div>
+                                <div class="alert-details">${item.details}</div>
+                            `;
+                            container.appendChild(card);
+                        });
+                    }
                 }
-            } catch (e) { console.error("Erreur de mise à jour du flux", e); }
+            } catch (e) { 
+                console.error("Erreur de synchronisation avec le dépôt", e); 
+            }
         }
 
-        // Boucle d'auto-rafraîchissement toutes les 30 secondes pour le navigateur OBS
+        // Rafraîchissement automatique toutes les 30 secondes pour capter les mises à jour sans clignotement
         setInterval(updateDashboard, 30000);
+        
+        // Exécution immédiate au démarrage initial d'OBS
         updateDashboard();
     </script>
 </body>
-      </html>
-      
+</html>
