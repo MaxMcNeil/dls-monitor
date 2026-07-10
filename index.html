@@ -30,9 +30,21 @@
         }
         .header h1 { margin: 0; font-size: 40px; text-shadow: 0 0 15px #00ff9c; font-weight: 900; }
         
-        /* Zone de défilement ventilée pour 4 alertes maximum */
+        /* Animation éternelle des 3 points de chargement */
+        .dot-loading::after {
+            content: ' .';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+        @keyframes dots {
+            0%, 20% { content: ' .'; }
+            40% { content: ' . .'; }
+            60% { content: ' . . .'; }
+            80%, 100% { content: ''; }
+        }
+
+        /* Zone de défilement ventilée remontée pour laisser apparaître le bas */
         .alert-container {
-            padding: 40px; height: 1300px; overflow: hidden; display: block;
+            padding: 40px; height: 1250px; overflow: hidden; display: block;
             position: relative;
         }
 
@@ -162,8 +174,7 @@
     </div>
     
     <div class="header">
-        <h1>[ CYBER INTELLIGENCE COMMAND CENTER ]</h1>
-        <div style="font-size: 22px; margin-top: 12px; color:#a3b8b0; font-weight: bold;">📊 DYNAMIC LIVE MATRIX // AUTOMATIC SCROLL ACTIVE</div>
+        <h1 class="dot-loading">[ LIVE : DEMANDES DE RANÇON ]</h1>
     </div>
 
     <div class="alert-container" id="feed"></div>
