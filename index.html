@@ -97,12 +97,12 @@
             100% { transform: scale(0.96); box-shadow: 0 0 20px rgba(255, 0, 85, 0.3); }
         }
 
-        /* Overlay Méga Flash Top 3 Urgent - Séquentiel Unique */
+        /* MODIFICATION APPORTÉE : Overlay Méga Flash Top 3 - TAILLE ET ENTRAINEMENT CRITIQUE MASSIVE POUR MALVOYANTS */
         .mega-flash-overlay {
             position: absolute; top: 0; left: 0; width: 1080px; height: 1920px;
-            background: rgba(35, 2, 6, 0.97); z-index: 9999;
-            display: none; padding: 300px 40px 60px 40px;
-            border: 24px solid #ff0055;
+            background: rgba(22, 1, 4, 0.99); z-index: 9999;
+            display: none; padding: 220px 50px 60px 50px;
+            border: 32px solid #ff0055;
             animation: flashIntro 0.2s ease-out;
         }
         
@@ -112,9 +112,18 @@
         }
 
         .flash-header {
-            text-align: center; color: #ff0055; font-size: 54px; font-weight: 900;
-            margin-bottom: 80px; letter-spacing: 5px; text-shadow: 0 0 30px #ff0055;
+            text-align: center; color: #ff0055; font-size: 64px; font-weight: 900;
+            margin-bottom: 90px; letter-spacing: 4px; text-shadow: 0 0 40px #ff0055;
+            line-height: 1.2;
         }
+        
+        .flash-card {
+            background: #000000; border: 6px solid #ff0055;
+            padding: 50px; border-radius: 12px;
+            box-shadow: 0 0 50px rgba(255, 0, 85, 0.3);
+        }
+        .flash-meta { font-size: 32px; color: #ffaa00; font-weight: bold; margin-bottom: 25px; letter-spacing: 2px; }
+        .flash-target { font-size: 52px; color: #ffffff; font-weight: bold; line-height: 1.3; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
     </style>
 </head>
 <body>
@@ -197,7 +206,7 @@
                 let item = allAlerts[index];
                 
                 const card = document.createElement('div');
-                // La carte du haut (i === 0) reçoit la classe d'animation de pulsation zoom
+                // La carte du haut (i === 0) receives the animation class
                 card.className = (i === 0) ? 'alert-card top-card-zoom' : 'alert-card';
                 
                 let displayTime = item.time ? item.time.split('.')[0] : "REAL-TIME";
@@ -216,13 +225,13 @@
             let currentRadarItem = allAlerts[currentIndex];
             radarTarget.innerText = currentRadarItem.target;
             
-            // CORRECTION BIP 1 : Déclenchement d'un bip propre haute fréquence à chaque rotation du rectangle du haut
+            // BIP 1 : Déclenchement d'un bip propre haute fréquence à chaque rotation du rectangle du haut
             playBeepSound(880, 0.15, 0.12);
 
             currentIndex = (currentIndex + 1) % allAlerts.length;
         }
 
-        // CORRECTION POPUP SEQUENTIEL : Affiche 1 seule alerte du Top 3 à la fois, change à chaque cycle
+        // POPUP SEQUENTIEL : Affiche 1 seule alerte du Top 3 à la fois, change à chaque cycle avec textes géants
         function triggerMegaFlashPopup() {
             if (allAlerts.length === 0) return;
             
@@ -238,21 +247,22 @@
             
             if (!item) item = allAlerts[0]; // Sécurité si le fichier contient moins de 3 éléments
             
-            flashTitle.innerText = `🚨 CRITICAL INCIDENT RANK #${rank + 1} 🚨`;
+            flashTitle.innerText = `🚨 CRITICAL ALERT RANK #${rank + 1} 🚨`;
             
             const fCard = document.createElement('div');
             fCard.className = 'flash-card';
+            // MODIFICATION APPORTÉE : Inline style appliqué sur la boîte de détails interne (font-size: 36px) pour une visibilité totale
             fCard.innerHTML = `
                 <div class="flash-meta">ACTEUR: ${item.hacker} // DETECTED: ${item.time.split('.')[0]}</div>
                 <div class="flash-target">TARGET: ${item.target}</div>
-                <div class="alert-details" style="margin-top:20px; font-size:24px;">${item.details}</div>
+                <div class="alert-details" style="margin-top:40px; font-size:36px; line-height:1.5; padding:25px;">${item.details}</div>
             `;
             flashContent.appendChild(fCard);
             
             // Rendu visible de l'overlay rouge semi-transparent
             flashOverlay.style.display = 'block';
             
-            // CORRECTION BIP 2 : Double bip strident de crise pour le popup d'alerte prioritaire
+            // BIP 2 : Double bip strident de crise pour le popup d'alerte prioritaire
             playBeepSound(440, 0.4, 0.35);
             setTimeout(() => playBeepSound(440, 0.4, 0.35), 200);
             
