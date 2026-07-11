@@ -9,15 +9,17 @@ jobs:
   check-updates:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Autorisation pour modifier le JSON sur ton repo
+      contents: write # Autorisation obligatoire pour modifier et pousser le JSON
     steps:
       - name: Récupérer le code du dépôt
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true # Conserve les droits pour le git push final
 
       - name: Configurer Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11' # On fixe une version stable récente
+          python-version: '3.11'
 
       - name: Installer les dépendances
         run: |
@@ -32,20 +34,27 @@ jobs:
 
       - name: Exécuter le script d'extraction
         run: |
-          # Le drapeau -u force Python à vider ses logs en temps réel dans la console GitHub
+          # Le drapeau -u force Python à cracher ses logs immédiatement
           python -u update_feed.py
 
       - name: Sauvegarder et pousser les changements
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           
-          # On vérifie si live-feed.json a bien été généré
+          # Vérification de sécurité pour s'assurer que le script a bossé
           if [ ! -f "live-feed.json" ]; then
-            echo "ERREUR CRITIQUE : live-feed.json n'a pas été créé par le script !"
+            echo "ERREUR CRITIQUE : live-feed.json n'existe pas ou n'a pas été généré !"
             exit 1
           fi
           
           git add live-feed.json
+          
+          # Commit forcé même s'il n'y a pas de nouvelles lignes textuelles
           git commit --allow-empty -m "Mise à jour automatique des alertes cyber [$(date +'%Y-%m-%d %H:%M:%S')]"
-          git push
+          
+          # Push sécurisé vers la branche principale
+          git push origin HEAD:main
+          
