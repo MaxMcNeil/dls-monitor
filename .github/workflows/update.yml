@@ -21,10 +21,17 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Mettre en cache le modèle de traduction IA
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/.cache/huggingface # Correspond exactement au dossier de cache Python
+          key: ${{ runner.os }}-transformers-nllb-v1
+
       - name: Installer les dépendances
         run: |
           python -m pip install --upgrade pip
-          pip install requests beautifulsoup4
+          # Installation de la version ultra-légère CPU de PyTorch + Transformers
+          pip install requests transformers torch --extra-index-url https://download.pytorch.org/whl/cpu
 
       - name: Vérifier l'emplacement du script
         run: |
@@ -32,7 +39,7 @@ jobs:
           ls -la
           echo "=================================="
 
-      - name: Exécuter le script d'extraction
+      - name: Exécuter le script d'extraction et traduction
         run: |
           # Le drapeau -u force Python à cracher ses logs immédiatement
           python -u update_feed.py
@@ -53,7 +60,7 @@ jobs:
           git add live-feed.json
           
           # Commit forcé même s'il n'y a pas de nouvelles lignes textuelles
-          git commit --allow-empty -m "Mise à jour automatique des alertes cyber [$(date +'%Y-%m-%d %H:%M:%S')]"
+          git commit --allow-empty -m "Mise à jour automatique des alertes cyber et traductions [$(date +'%Y-%m-%d %H:%M:%S')]"
           
           # Push sécurisé vers la branche principale
           git push origin HEAD:main
