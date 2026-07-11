@@ -2,7 +2,7 @@ name: Surveillance DLS Monitor
 
 on:
   schedule:
-    - cron: '*/30 * * * *' # S'exécute automatiquement toutes les 30 minutes
+    - cron: '0 */4 * * *' # S'exécute automatiquement toutes les 4 heures (à la minute 0)
   workflow_dispatch: # Permet de le lancer manuellement en 1 clic
 
 jobs:
