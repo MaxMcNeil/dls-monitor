@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 // Configuration absolue pour l'environnement CI/CD
 const CACHE_DIR = "/home/runner/.cache/huggingface";
 
-// URLs des sources (Utilisation du flux brut GitHub pour éviter le Cloudflare Rate Limit)
+// URLs des sources
 const POSTS_URL = "https://raw.githubusercontent.com/cyberiskvision/dls-monitor/main/posts.json";
 const RANSOM_LIVE_RAW = "https://raw.githubusercontent.com/Casualtek/Ransomware.live/main/posts.json";
 
@@ -19,9 +19,15 @@ function sanitizeText(text) {
 }
 
 let translatorInstance = null;
+// Cache mémoire pour éviter de retraduire les chaînes identiques
+const translationCache = new Map();
 
 async function translateText(text) {
     if (!text) return "";
+    if (translationCache.has(text)) {
+        return translationCache.get(text);
+    }
+
     try {
         const { pipeline, env } = await import('@xenova/transformers');
         
@@ -42,9 +48,11 @@ async function translateText(text) {
             tgt_lang: 'fra_Latn',
         });
 
-        return output[0]?.translation_text || text;
+        const translated = output[0]?.translation_text || text;
+        translationCache.set(text, translated);
+        return translated;
     } catch (e) {
-        console.error(`[Translation Fallback] Erreur IA, texte original conservé : ${e.message}`);
+        console.error(`[Translation Fallback] Erreur IA : ${e.message}`);
         return text;
     }
 }
@@ -63,7 +71,8 @@ async function getCyberFeed() {
             let posts = await response.json();
             posts.sort((a, b) => b.discovered.localeCompare(a.discovered));
 
-            const targets = posts.slice(0, 60);
+            // Optimisation : On prend le top 30 des plus frais pour garantir le tri final
+            const targets = posts.slice(0, 30);
             for (const post of targets) {
                 const title = post.post_title || "Cible Inconnue";
                 const group = post.group_name || "unknown";
@@ -86,15 +95,14 @@ async function getCyberFeed() {
     }
 
     // ==========================================
-    // CUMUL - ETAPE 2 : AJOUT DE LA SOURCE 2 (Ransomware.live Brûte)
+    // CUMUL - ETAPE 2 : AJOUT DE LA SOURCE 2 (Ransomware.live)
     // ==========================================
-    console.log(`Connexion Source 2 (Flux GitHub sans limitation) : ${RANSOM_LIVE_RAW}`);
+    console.log(`Connexion Source 2 : ${RANSOM_LIVE_RAW}`);
     try {
         const res2 = await fetch(RANSOM_LIVE_RAW);
         if (res2.status === 200) {
             let attacks = await res2.json();
             
-            // Gestion de la structure du fichier brut ou API
             if (attacks && typeof attacks === 'object' && attacks.attacks) {
                 attacks = attacks.attacks;
             }
@@ -102,7 +110,8 @@ async function getCyberFeed() {
             attacks.sort((a, b) => b.discovered.localeCompare(a.discovered));
 
             let countSource2 = 0;
-            const recentAttacks = attacks.slice(0, 70);
+            // Optimisation : On prend le top 35 des plus frais
+            const recentAttacks = attacks.slice(0, 35);
             for (const attack of recentAttacks) {
                 const company = attack.company || attack.post_title || "Cible Inconnue";
                 const groupName = attack.group_name || "UNKNOWN";
@@ -119,8 +128,6 @@ async function getCyberFeed() {
                 countSource2++;
             }
             console.log(`OK: ${countSource2} éléments ajoutés depuis Source 2.`);
-        } else {
-            console.log(`Note: Statut réponse Source 2 inattendu -> ${res2.status}`);
         }
     } catch (e) {
         console.log(`Note: Échec Source 2 -> ${e.message}`);
@@ -130,11 +137,11 @@ async function getCyberFeed() {
     // FUSION, TRI CHRONOLOGIQUE ET INTERSECTION
     // ==========================================
     if (outputFeed.length === 0) {
-        console.error("ERREUR CRITIQUE: Aucune donnée récupérée des deux sources.");
+        console.error("ERREUR CRITIQUE: Aucune donnée récupérée.");
         process.exit(1);
     }
 
-    // Tri chronologique global (les plus récents en premier basés sur la date cachée)
+    // Tri chronologique global (les plus récents en premier)
     outputFeed.sort((a, b) => b.time.localeCompare(a.time));
 
     // Déduplication stricte par entreprise
@@ -145,13 +152,13 @@ async function getCyberFeed() {
         if (!seen.has(lookupKey)) {
             seen.add(lookupKey);
             
-            // Suppression définitive de la date pour le live final
+            // Suppression définitive de la date pour le fichier final
             const { time, ...itemWithoutTime } = item;
             finalCleanFeed.push(itemWithoutTime);
         }
     }
 
-    // Ajustement dynamique pour rester strictement entre 50 et 100 éléments
+    // Sécurité : On s'assure d'afficher entre 50 et 100 alertes sur le live
     const totalCount = Math.min(Math.max(finalCleanFeed.length, 50), 100);
     const result = finalCleanFeed.slice(0, totalCount);
 
@@ -161,4 +168,3 @@ async function getCyberFeed() {
 }
 
 getCyberFeed();
-    
