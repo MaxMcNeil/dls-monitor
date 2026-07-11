@@ -64,8 +64,8 @@ async function getCyberFeed() {
             let posts = await response.json();
             posts.sort((a, b) => b.discovered.localeCompare(a.discovered));
 
-            // On prend les 15 premiers
-            const targets = posts.slice(0, 15);
+            // On augmente la limite pour atteindre l'objectif des 50-100 résultats
+            const targets = posts.slice(0, 60);
             for (const post of targets) {
                 const title = post.post_title || "Cible Inconnue";
                 const group = post.group_name || "unknown";
@@ -77,7 +77,7 @@ async function getCyberFeed() {
                 outputFeed.push({
                     target: sanitizeText(title),
                     hacker: group.toUpperCase(),
-                    time: dateRaw,
+                    time: dateRaw, // Conservé temporairement pour le tri global
                     details: sanitizeText(detailsFr)
                 });
             }
@@ -101,8 +101,8 @@ async function getCyberFeed() {
             attacks.sort((a, b) => b.discovered.localeCompare(a.discovered));
 
             let countSource2 = 0;
-            // On prend les 20 plus récentes sans filtre FR pour saturer le cumul
-            const recentAttacks = attacks.slice(0, 20);
+            // On augmente la limite pour collecter un maximum d'alertes fraîches
+            const recentAttacks = attacks.slice(0, 70);
             for (const attack of recentAttacks) {
                 const company = attack.company || "Cible Inconnue";
                 const groupName = attack.group_name || "UNKNOWN";
@@ -113,7 +113,7 @@ async function getCyberFeed() {
                 outputFeed.push({
                     target: sanitizeText(company),
                     hacker: groupName.toUpperCase(),
-                    time: attack.discovered || "",
+                    time: attack.discovered || "", // Conservé temporairement pour le tri global
                     details: sanitizeText(detailsFr)
                 });
                 countSource2++;
@@ -132,7 +132,7 @@ async function getCyberFeed() {
         process.exit(1);
     }
 
-    // Tri chronologique global (récents en premier)
+    // Tri chronologique global (les plus récents en premier basés sur la date cachée)
     outputFeed.sort((a, b) => b.time.localeCompare(a.time));
 
     // Déduplication stricte par entreprise
@@ -142,14 +142,18 @@ async function getCyberFeed() {
         const lookupKey = item.target.toLowerCase().trim();
         if (!seen.has(lookupKey)) {
             seen.add(lookupKey);
-            finalCleanFeed.push(item);
+            
+            // Suppression définitive de la date pour le live final
+            const { time, ...itemWithoutTime } = item;
+            finalCleanFeed.push(itemWithoutTime);
         }
     }
 
-    // On garde le Top 20 final
-    const result = finalCleanFeed.slice(0, 20);
+    // Ajustement dynamique de la taille pour rester strictement entre 50 et 100 éléments
+    const totalCount = Math.min(Math.max(finalCleanFeed.length, 50), 100);
+    const result = finalCleanFeed.slice(0, totalCount);
 
-    console.log(`Écriture finale dans live-feed.json (${result.length} éléments cumulés)...`);
+    console.log(`Écriture finale dans live-feed.json (${result.length} éléments cumulés sans date)...`);
     fs.writeFileSync("live-feed.json", JSON.stringify(result, null, 4), 'utf-8');
     console.log("--- PIPELINE NODE.JS MULTI-SOURCE ET TRADUCTION TERMINE ---");
 }
