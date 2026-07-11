@@ -4,9 +4,9 @@ const fetch = require('node-fetch');
 // Configuration absolue pour l'environnement CI/CD
 const CACHE_DIR = "/home/runner/.cache/huggingface";
 
-// URLs des sources
+// URLs des sources (Utilisation du flux brut GitHub pour éviter le Cloudflare Rate Limit)
 const POSTS_URL = "https://raw.githubusercontent.com/cyberiskvision/dls-monitor/main/posts.json";
-const RANSOM_LIVE_API = "https://api.ransomware.live/recent";
+const RANSOM_LIVE_RAW = "https://raw.githubusercontent.com/Casualtek/Ransomware.live/main/posts.json";
 
 function sanitizeText(text) {
     if (!text) return "";
@@ -23,7 +23,6 @@ let translatorInstance = null;
 async function translateText(text) {
     if (!text) return "";
     try {
-        // Importation dynamique de Transformers (nécessaire en CommonJS Node)
         const { pipeline, env } = await import('@xenova/transformers');
         
         env.allowLocalFiles = true;
@@ -64,7 +63,6 @@ async function getCyberFeed() {
             let posts = await response.json();
             posts.sort((a, b) => b.discovered.localeCompare(a.discovered));
 
-            // On augmente la limite pour atteindre l'objectif des 50-100 résultats
             const targets = posts.slice(0, 60);
             for (const post of targets) {
                 const title = post.post_title || "Cible Inconnue";
@@ -77,7 +75,7 @@ async function getCyberFeed() {
                 outputFeed.push({
                     target: sanitizeText(title),
                     hacker: group.toUpperCase(),
-                    time: dateRaw, // Conservé temporairement pour le tri global
+                    time: dateRaw,
                     details: sanitizeText(detailsFr)
                 });
             }
@@ -88,23 +86,25 @@ async function getCyberFeed() {
     }
 
     // ==========================================
-    // CUMUL - ETAPE 2 : AJOUT DE LA SOURCE 2 (Ransomware.live)
+    // CUMUL - ETAPE 2 : AJOUT DE LA SOURCE 2 (Ransomware.live Brûte)
     // ==========================================
-    console.log(`Connexion Source 2 : ${RANSOM_LIVE_API}`);
+    console.log(`Connexion Source 2 (Flux GitHub sans limitation) : ${RANSOM_LIVE_RAW}`);
     try {
-        const res2 = await fetch(RANSOM_LIVE_API);
+        const res2 = await fetch(RANSOM_LIVE_RAW);
         if (res2.status === 200) {
             let attacks = await res2.json();
+            
+            // Gestion de la structure du fichier brut ou API
             if (attacks && typeof attacks === 'object' && attacks.attacks) {
                 attacks = attacks.attacks;
             }
+            
             attacks.sort((a, b) => b.discovered.localeCompare(a.discovered));
 
             let countSource2 = 0;
-            // On augmente la limite pour collecter un maximum d'alertes fraîches
             const recentAttacks = attacks.slice(0, 70);
             for (const attack of recentAttacks) {
-                const company = attack.company || "Cible Inconnue";
+                const company = attack.company || attack.post_title || "Cible Inconnue";
                 const groupName = attack.group_name || "UNKNOWN";
 
                 const rawDetails = `Ransomware incident detected on infrastructures. Claimed by ${groupName.toUpperCase()}.`;
@@ -113,12 +113,14 @@ async function getCyberFeed() {
                 outputFeed.push({
                     target: sanitizeText(company),
                     hacker: groupName.toUpperCase(),
-                    time: attack.discovered || "", // Conservé temporairement pour le tri global
+                    time: attack.discovered || "",
                     details: sanitizeText(detailsFr)
                 });
                 countSource2++;
             }
             console.log(`OK: ${countSource2} éléments ajoutés depuis Source 2.`);
+        } else {
+            console.log(`Note: Statut réponse Source 2 inattendu -> ${res2.status}`);
         }
     } catch (e) {
         console.log(`Note: Échec Source 2 -> ${e.message}`);
@@ -149,7 +151,7 @@ async function getCyberFeed() {
         }
     }
 
-    // Ajustement dynamique de la taille pour rester strictement entre 50 et 100 éléments
+    // Ajustement dynamique pour rester strictement entre 50 et 100 éléments
     const totalCount = Math.min(Math.max(finalCleanFeed.length, 50), 100);
     const result = finalCleanFeed.slice(0, totalCount);
 
@@ -159,3 +161,4 @@ async function getCyberFeed() {
 }
 
 getCyberFeed();
+    
