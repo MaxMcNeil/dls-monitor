@@ -3,13 +3,13 @@ name: Surveillance DLS Monitor
 on:
   schedule:
     - cron: '*/30 * * * *' # S'exécute automatiquement toutes les 30 minutes
-  workflow_dispatch: # Te permet de le lancer manuellement en 1 clic pour tester
+  workflow_dispatch: # Permet de le lancer manuellement en 1 clic
 
 jobs:
   check-updates:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Autorisation indispensable pour mettre à jour le JSON sur ton repo
+      contents: write # Autorisation pour modifier le JSON sur ton repo
     steps:
       - name: Récupérer le code du dépôt
         uses: actions/checkout@v4
@@ -17,22 +17,35 @@ jobs:
       - name: Configurer Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.11' # On fixe une version stable récente
 
       - name: Installer les dépendances
-        run: pip install requests beautifulsoup4
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+
+      - name: Vérifier l'emplacement du script
+        run: |
+          echo "=== LISTE DES FICHIERS DU REPO ==="
+          ls -la
+          echo "=================================="
 
       - name: Exécuter le script d'extraction
-        run: python update_feed.py
+        run: |
+          # Le drapeau -u force Python à vider ses logs en temps réel dans la console GitHub
+          python -u update_feed.py
 
       - name: Sauvegarder et pousser les changements
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          
+          # On vérifie si live-feed.json a bien été généré
+          if [ ! -f "live-feed.json" ]; then
+            echo "ERREUR CRITIQUE : live-feed.json n'a pas été créé par le script !"
+            exit 1
+          fi
+          
           git add live-feed.json
-          
-          # LE FIX : --allow-empty force Git à valider le commit même s'il n'y a aucun changement textuel
           git commit --allow-empty -m "Mise à jour automatique des alertes cyber [$(date +'%Y-%m-%d %H:%M:%S')]"
-          
           git push
-          
