@@ -51,9 +51,75 @@
             75%, 100% { content: ' . . .'; }
         }
 
+        /* Effet CRT / scanlines - ambiance "terminal hacker", n'occupe aucun espace de layout */
+        .scanline-overlay {
+            position: absolute; top: 0; left: 0; width: 1080px; height: 1920px;
+            pointer-events: none; z-index: 50; mix-blend-mode: overlay;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(0, 255, 156, 0.05) 0px,
+                rgba(0, 255, 156, 0.05) 1px,
+                transparent 2px,
+                transparent 4px
+            );
+            animation: scanMove 6s linear infinite;
+        }
+        @keyframes scanMove {
+            0% { background-position-y: 0; }
+            100% { background-position-y: 40px; }
+        }
+
+        /* Barre de stats live - donne de l'échelle et de l'urgence en un coup d'oeil */
+        .stats-bar {
+            background: #060f0b; border-bottom: 3px solid #00ff9c;
+            padding: 16px 20px; display: table; width: 100%;
+            font-size: 22px; font-weight: 900; letter-spacing: 1px; table-layout: fixed;
+        }
+        .stats-cell { display: table-cell; text-align: center; color: #00ff9c; }
+        .stats-value { color: #ffffff; }
+        .stats-live-dot {
+            display: inline-block; width: 14px; height: 14px; border-radius: 50%;
+            background: #ff0055; margin-right: 8px; box-shadow: 0 0 10px #ff0055;
+            animation: livePulse 1.2s infinite;
+        }
+        @keyframes livePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+
+        /* Barre de progression - crée l'attente avant la prochaine alerte choc */
+        .progress-track { height: 10px; background: #0c1c15; position: relative; overflow: hidden; }
+        .progress-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #00ff9c, #ffaa00);
+            box-shadow: 0 0 12px rgba(0, 255, 156, 0.6);
+        }
+
+        /* Badge NOUVEAU - flashe uniquement sur les cibles jamais vues auparavant */
+        .new-badge {
+            display: inline-block; background: #ffd400; color: #000000;
+            font-size: 19px; font-weight: 900; padding: 5px 12px; border-radius: 4px;
+            margin-right: 12px; letter-spacing: 1px; vertical-align: middle;
+            animation: newBlink 0.9s infinite;
+        }
+        @keyframes newBlink { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.55; transform: scale(1.08); } }
+
+        .alert-card.just-new { animation: newCardFlash 1.6s ease-out; }
+        @keyframes newCardFlash {
+            0% { box-shadow: 0 0 60px rgba(255, 212, 0, 0.9); border-color: #ffd400; }
+            100% { box-shadow: 0 0 25px rgba(0, 255, 156, 0.1); }
+        }
+
+        /* Glitch furtif sur le titre de la cible au moment où le popup choc apparaît */
+        .glitch-active { animation: glitchText 0.35s steps(2, end) 2; }
+        @keyframes glitchText {
+            0% { text-shadow: 3px 0 #00fff9, -3px 0 #ff0055; transform: translate(0, 0); }
+            25% { text-shadow: -3px 0 #00fff9, 3px 0 #ff0055; transform: translate(-3px, 1px); }
+            50% { text-shadow: 3px 0 #00fff9, -3px 0 #ff0055; transform: translate(3px, -1px); }
+            75% { text-shadow: -2px 0 #00fff9, 2px 0 #ff0055; transform: translate(-1px, 0); }
+            100% { text-shadow: 0 0 15px rgba(255,255,255,0.4); transform: translate(0, 0); }
+        }
+
         /* Zone de défilement ventilée remontée pour laisser apparaître le bas */
         .alert-container {
-            padding: 40px; height: 1250px; overflow: hidden; display: block;
+            padding: 40px; height: 1180px; overflow: hidden; display: block;
             position: relative;
         }
 
@@ -182,6 +248,8 @@
 </head>
 <body>
 
+    <div class="scanline-overlay"></div>
+
     <div class="mega-flash-overlay" id="mega-flash">
         <div class="flash-vertical-center">
             <div class="flash-cell">
@@ -199,6 +267,14 @@
         <h1 class="dot-loading">LIVE : DEMANDES DE RANÇON</h1>
     </div>
 
+    <div class="stats-bar">
+        <div class="stats-cell"><span class="stats-live-dot"></span>EN DIRECT</div>
+        <div class="stats-cell">ALERTES : <span class="stats-value" id="stat-total">--</span></div>
+        <div class="stats-cell">🇫🇷 FRANCE : <span class="stats-value" id="stat-france">--</span></div>
+        <div class="stats-cell">TOP ACTEUR : <span class="stats-value" id="stat-top">--</span></div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+
     <div class="alert-container" id="feed"></div>
 
     <div class="radar-popup-zone">
@@ -212,6 +288,16 @@
         let allAlerts = [];
         let currentIndex = 0;
         let flashIndex = 0; // Index séquentiel perpétuel pour le Top 3
+
+        // Suivi des cibles déjà vues, pour détecter les VRAIES nouveautés entre deux synchronisations
+        let knownTargets = new Set();
+        let firstSeenMap = new Map();
+        let isFirstLoad = true;
+        const NEW_BADGE_WINDOW_MS = 6 * 60 * 1000; // une cible reste taguée "NOUVEAU" pendant 6 minutes
+
+        // Cycle de la barre de progression avant le prochain popup choc
+        const FLASH_INTERVAL_MS = 60000;
+        let flashCycleStart = Date.now();
         
         const container = document.getElementById('feed');
         const radarTarget = document.getElementById('radar-target');
@@ -246,10 +332,66 @@
                 const data = await res.json();
                 if (data && data.length > 0) {
                     allAlerts = data;
+                    detectNewTargets(data);
+                    updateStatsBar();
                 }
             } catch (e) {
                 console.error("Erreur de synchronisation", e);
             }
+        }
+
+        // Compare les cibles reçues à celles déjà connues : joue un son distinct et tague
+        // "NOUVEAU" les cibles qui n'existaient pas lors de la synchronisation précédente.
+        function detectNewTargets(data) {
+            let newFound = false;
+            const now = Date.now();
+            for (const item of data) {
+                const key = item.target.toLowerCase().trim();
+                if (!knownTargets.has(key)) {
+                    knownTargets.add(key);
+                    if (!isFirstLoad) {
+                        firstSeenMap.set(key, now);
+                        newFound = true;
+                    }
+                }
+            }
+            isFirstLoad = false;
+            if (newFound) {
+                // Chirp aigu distinct des autres bips, pour signaler une vraie nouvelle cible détectée
+                playBeepSound(1500, 0.08, 0.15);
+                setTimeout(() => playBeepSound(1900, 0.08, 0.15), 90);
+            }
+        }
+
+        function isNewTarget(item) {
+            const key = item.target.toLowerCase().trim();
+            const seenAt = firstSeenMap.get(key);
+            return seenAt ? (Date.now() - seenAt) < NEW_BADGE_WINDOW_MS : false;
+        }
+
+        function updateStatsBar() {
+            const totalEl = document.getElementById('stat-total');
+            const franceEl = document.getElementById('stat-france');
+            const topEl = document.getElementById('stat-top');
+            if (!totalEl) return;
+
+            totalEl.innerText = allAlerts.length;
+            franceEl.innerText = allAlerts.filter(a => a.country === 'FR').length;
+
+            const freq = {};
+            allAlerts.forEach(a => { freq[a.hacker] = (freq[a.hacker] || 0) + 1; });
+            let topGroup = '--', topCount = 0;
+            for (const g in freq) {
+                if (freq[g] > topCount) { topCount = freq[g]; topGroup = g; }
+            }
+            topEl.innerText = topGroup;
+        }
+
+        function updateProgressBar() {
+            const fill = document.getElementById('progress-fill');
+            if (!fill) return;
+            const elapsed = (Date.now() - flashCycleStart) % FLASH_INTERVAL_MS;
+            fill.style.width = ((elapsed / FLASH_INTERVAL_MS) * 100) + '%';
         }
 
         function formatTime(item) {
@@ -266,21 +408,24 @@
                 let index = (currentIndex + i) % allAlerts.length;
                 let item = allAlerts[index];
                 let isFrance = item.country === 'FR';
+                let isNew = isNewTarget(item);
                 
                 const card = document.createElement('div');
                 // La carte du haut (i === 0) receives the animation class
                 card.className = (i === 0) ? 'alert-card top-card-zoom' : 'alert-card';
                 if (isFrance) card.className += ' france-flag';
+                if (isNew) card.className += ' just-new';
                 
                 let displayTime = formatTime(item);
                 let franceBadge = isFrance ? '<span class="france-badge">🇫🇷 FRANCE</span>' : '';
+                let newBadge = isNew ? '<span class="new-badge">🆕 NOUVEAU</span>' : '';
                 
                 card.innerHTML = `
                     <div class="alert-meta">
                         <div class="meta-hacker">▲ ACTEUR: ${item.hacker}</div>
                         <div class="meta-time">${displayTime}</div>
                     </div>
-                    <div class="alert-target">${franceBadge}CIBLE DÉTECTÉE : ${item.target}</div>
+                    <div class="alert-target">${franceBadge}${newBadge}CIBLE DÉTECTÉE : ${item.target}</div>
                     <div class="alert-details">${item.details}</div>
                 `;
                 container.appendChild(card);
@@ -318,12 +463,16 @@
             // Application d'un style de détails massif (font-size: 38px) et aéré pour l'accessibilité
             fCard.innerHTML = `
                 <div class="flash-meta">ACTEUR: ${item.hacker} // DETECTED: ${formatTime(item)}</div>
-                <div class="flash-target">TARGET: ${item.target}</div>
+                <div class="flash-target glitch-active">TARGET: ${item.target}</div>
                 <div class="alert-details" style="margin-top:20px; font-size:42px; line-height:1.6; padding:35px; background-color:#020504; border:3px solid #ff0055; font-weight:bold;">${item.details}</div>
             `;
             flashContent.appendChild(fCard);
             
             flashOverlay.style.display = 'block';
+            
+            // La barre de progression repart de zéro à chaque déclenchement du popup
+            flashCycleStart = Date.now();
+            updateProgressBar();
             
             // BIP 2 : Double bip strident de crise pour le popup d'alerte prioritaire
             playBeepSound(440, 0.4, 0.35);
@@ -344,7 +493,11 @@
             setInterval(rotateAlerts, 8000);
             
             // Cycle séquentiel du Méga Flash Popup (Toutes les 60 secondes)
+            flashCycleStart = Date.now();
             setInterval(triggerMegaFlashPopup, 60000);
+            
+            // Rafraîchissement fluide de la barre de progression
+            setInterval(updateProgressBar, 200);
             
             // Synchronisation du fichier source (Toutes les 30 secondes)
             setInterval(fetchNewData, 30000);
@@ -354,3 +507,4 @@
     </script>
 </body>
 </html>
+        
