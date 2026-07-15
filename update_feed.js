@@ -1,18 +1,23 @@
 const fs = require('fs');
 const fetch = require('node-fetch');
 
-// URLs des sources
+// ==========================================
+// SOURCES (6 au total, pour la redondance : si une source est en panne
+// ou peu active, les 5 autres compensent)
+// ==========================================
 const POSTS_URL = "https://raw.githubusercontent.com/cyberiskvision/dls-monitor/main/posts.json";
 const RANSOM_LIVE_RAW = "https://raw.githubusercontent.com/Casualtek/Ransomware.live/main/posts.json";
 const RANSOMLIVE_API_FR = "https://api.ransomware.live/v2/countryvictims/FR";
-const RANSOMLOOK_API = "https://www.ransomlook.io/api/posts?days=3";
+const RANSOMLIVE_API_RECENT = "https://api.ransomware.live/v2/recentvictims";
+const RANSOMLIVE_API_PRESS = "https://api.ransomware.live/v2/recentcyberattacks";
+const RANSOMLOOK_API = "https://www.ransomlook.io/api/posts?days=7";
 
-// Un User-Agent générique évite les blocages 403 de certaines API publiques
 const FETCH_HEADERS = { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CyberMonitorFR/1.0)' } };
 
-// Fenêtre de fraîcheur : on ne garde QUE ce qui a été publié il y a moins de 72h.
-// Au-delà de ce filtre, aucune limite sur le nombre d'alertes affichées.
-const MAX_AGE_HOURS = 72;
+// Fenêtre de fraîcheur cible : 7 jours. Si trop peu de résultats passent ce filtre,
+// un filet de sécurité automatique élargit la sélection (voir applyFreshnessFilter).
+const TARGET_WINDOW_HOURS = 24 * 7;
+const MIN_ALERTS_EXPECTED = 15;
 
 function sanitizeText(text) {
     if (!text) return "";
@@ -26,9 +31,6 @@ function pick(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// Formulations volontairement percutantes/choquantes mais toujours au conditionnel
-// ("revendique", "affirme", "menace") car il s'agit d'accusations non vérifiées
-// émises par les groupes eux-mêmes sur leur site de fuite.
 const GENERIC_TEMPLATES = [
     (t, g) => `🚨 ${g} revendique une intrusion chez ${t} et menace de publier l'intégralité des données volées si la rançon n'est pas payée.`,
     (t, g) => `${t} dans le viseur de ${g} : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web.`,
@@ -44,190 +46,208 @@ const FRANCE_TEMPLATES = [
     (t, g, s) => `🇫🇷 Chantage numérique sur le sol français : ${t}${s} au cœur d'une revendication de ${g}.`
 ];
 
-function buildRecap(target, group, secteur, isFrance) {
+const PRESS_TEMPLATES = [
+    (t, g) => `📰 Fuite de données confirmée par la presse : ${t} aurait été compromise, incident attribué à ${g}.`,
+    (t, g) => `Alerte médiatique : une cyberattaque visant ${t} fait la une, ${g} pointé du doigt.`,
+    (t, g) => `${t} au cœur d'un signalement presse pour une possible violation de données liée à ${g}.`
+];
+
+function buildRecap(target, group, secteur, isFrance, isPress) {
     if (isFrance) {
         const secteurTxt = secteur ? ` (secteur ${secteur})` : "";
         return sanitizeText(pick(FRANCE_TEMPLATES)(target, group, secteurTxt));
     }
+    if (isPress) {
+        return sanitizeText(pick(PRESS_TEMPLATES)(target, group));
+    }
     return sanitizeText(pick(GENERIC_TEMPLATES)(target, group));
 }
 
-// Renvoie true si la date (string ISO ou parsable) est dans la fenêtre MAX_AGE_HOURS
-function isRecent(dateStr) {
-    if (!dateStr) return false;
-    const t = Date.parse(dateStr);
-    if (isNaN(t)) return false;
-    const ageHours = (Date.now() - t) / 3600000;
-    return ageHours >= 0 && ageHours <= MAX_AGE_HOURS;
+// Parsing de date tolérant : ajoute un 'Z' si la chaîne ressemble à une date ISO
+// sans fuseau horaire, pour éviter les décalages d'interprétation locale/UTC.
+function parseDateSafe(dateStr) {
+    if (!dateStr) return null;
+    let s = String(dateStr).trim();
+    if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/.test(s)) s += 'Z';
+    const t = Date.parse(s);
+    return isNaN(t) ? null : t;
+}
+
+function ageHours(dateStr) {
+    const t = parseDateSafe(dateStr);
+    if (t === null) return null;
+    return (Date.now() - t) / 3600000;
+}
+
+async function safeFetchJson(url, label) {
+    try {
+        const res = await fetch(url, FETCH_HEADERS);
+        if (res.status !== 200) {
+            console.log(`Note: ${label} a répondu avec le statut ${res.status}`);
+            return null;
+        }
+        const data = await res.json();
+        return data;
+    } catch (e) {
+        console.log(`Note: Échec ${label} -> ${e.message}`);
+        return null;
+    }
 }
 
 async function getCyberFeed() {
-    console.log(`--- DEBUT DE L'EXTRACTION MULTI-SOURCES NODE.JS (FENÊTRE ${MAX_AGE_HOURS}H) ---`);
+    console.log("--- DEBUT DE L'EXTRACTION MULTI-SOURCES (6 sources, fenêtre cible 7 jours) ---");
     let outputFeed = [];
 
-    // ==========================================
-    // CUMUL - ETAPE 1 : SOURCE 1 (Cyberisk)
-    // ==========================================
+    // ---------- SOURCE 1 : Cyberisk ----------
     console.log(`Connexion Source 1 : ${POSTS_URL}`);
-    try {
-        const response = await fetch(POSTS_URL, FETCH_HEADERS);
-        if (response.status === 200) {
-            let posts = await response.json();
-            posts.sort((a, b) => (b.discovered || "").localeCompare(a.discovered || ""));
-
-            let countSource1 = 0;
-            for (const post of posts) {
-                const dateRaw = post.discovered || "";
-                if (!isRecent(dateRaw)) continue;
-
-                const title = post.post_title || "Cible Inconnue";
-                const group = (post.group_name || "unknown").toUpperCase();
-
-                outputFeed.push({
-                    target: sanitizeText(title),
-                    hacker: group,
-                    time: dateRaw,
-                    details: buildRecap(sanitizeText(title), group, "", false)
-                });
-                countSource1++;
-            }
-            console.log(`OK: ${countSource1} éléments (< ${MAX_AGE_HOURS}h) chargés depuis Source 1.`);
+    const s1 = await safeFetchJson(POSTS_URL, "Source 1 (Cyberisk)");
+    if (Array.isArray(s1)) {
+        let count = 0;
+        for (const post of s1) {
+            const title = post.post_title || "Cible Inconnue";
+            const group = (post.group_name || "unknown").toUpperCase();
+            const dateRaw = post.discovered || "";
+            const t = sanitizeText(title);
+            outputFeed.push({ target: t, hacker: group, time: dateRaw, details: buildRecap(t, group, "", false, false) });
+            count++;
         }
-    } catch (e) {
-        console.log(`Note: Échec Source 1 -> ${e.message}`);
+        console.log(`OK: ${count} éléments récupérés depuis Source 1.`);
     }
 
-    // ==========================================
-    // CUMUL - ETAPE 2 : SOURCE 2 (Ransomware.live - flux brut GitHub)
-    // ==========================================
+    // ---------- SOURCE 2 : Ransomware.live (mirror GitHub) ----------
     console.log(`Connexion Source 2 : ${RANSOM_LIVE_RAW}`);
-    try {
-        const res2 = await fetch(RANSOM_LIVE_RAW, FETCH_HEADERS);
-        if (res2.status === 200) {
-            let attacks = await res2.json();
-
-            if (attacks && typeof attacks === 'object' && attacks.attacks) {
-                attacks = attacks.attacks;
-            }
-
-            attacks.sort((a, b) => (b.discovered || "").localeCompare(a.discovered || ""));
-
-            let countSource2 = 0;
-            for (const attack of attacks) {
-                const dateRaw = attack.discovered || "";
-                if (!isRecent(dateRaw)) continue;
-
-                const company = attack.company || attack.post_title || "Cible Inconnue";
-                const groupName = (attack.group_name || "UNKNOWN").toUpperCase();
-
-                outputFeed.push({
-                    target: sanitizeText(company),
-                    hacker: groupName,
-                    time: dateRaw,
-                    details: buildRecap(sanitizeText(company), groupName, "", false)
-                });
-                countSource2++;
-            }
-            console.log(`OK: ${countSource2} éléments (< ${MAX_AGE_HOURS}h) ajoutés depuis Source 2.`);
+    let s2 = await safeFetchJson(RANSOM_LIVE_RAW, "Source 2 (Ransomware.live mirror)");
+    if (s2 && typeof s2 === 'object' && s2.attacks) s2 = s2.attacks;
+    if (Array.isArray(s2)) {
+        let count = 0;
+        for (const attack of s2) {
+            const company = attack.company || attack.post_title || "Cible Inconnue";
+            const groupName = (attack.group_name || "UNKNOWN").toUpperCase();
+            const dateRaw = attack.discovered || "";
+            const t = sanitizeText(company);
+            outputFeed.push({ target: t, hacker: groupName, time: dateRaw, details: buildRecap(t, groupName, "", false, false) });
+            count++;
         }
-    } catch (e) {
-        console.log(`Note: Échec Source 2 -> ${e.message}`);
+        console.log(`OK: ${count} éléments récupérés depuis Source 2.`);
     }
 
-    // ==========================================
-    // CUMUL - ETAPE 3 : SOURCE 3 (Ransomware.live API v2 - focus FRANCE)
-    // ==========================================
+    // ---------- SOURCE 3 : Ransomware.live API - focus FRANCE ----------
     console.log(`Connexion Source 3 (FRANCE) : ${RANSOMLIVE_API_FR}`);
-    try {
-        const res3 = await fetch(RANSOMLIVE_API_FR, FETCH_HEADERS);
-        if (res3.status === 200) {
-            let victims = await res3.json();
-            if (Array.isArray(victims)) {
-                victims.sort((a, b) => (b.attackdate || "").localeCompare(a.attackdate || ""));
-
-                let countSource3 = 0;
-                for (const v of victims) {
-                    const dateRaw = v.attackdate || v.discovered || "";
-                    if (!isRecent(dateRaw)) continue;
-
-                    const target = sanitizeText(v.victim || v.post_title || "Cible Inconnue");
-                    const group = (v.group || v.group_name || "unknown").toUpperCase();
-                    const secteur = v.activity && v.activity.toLowerCase() !== "not found" ? v.activity : "";
-
-                    outputFeed.push({
-                        target: target,
-                        hacker: group,
-                        time: dateRaw,
-                        details: buildRecap(target, group, secteur, true),
-                        country: "FR"
-                    });
-                    countSource3++;
-                }
-                console.log(`OK: ${countSource3} éléments France (< ${MAX_AGE_HOURS}h) chargés depuis Source 3.`);
-            }
-        } else {
-            console.log(`Note: Source 3 a répondu avec le statut ${res3.status}`);
+    const s3 = await safeFetchJson(RANSOMLIVE_API_FR, "Source 3 (Ransomware.live FR)");
+    if (Array.isArray(s3)) {
+        let count = 0;
+        for (const v of s3) {
+            const target = sanitizeText(v.victim || v.post_title || "Cible Inconnue");
+            const group = (v.group || v.group_name || "unknown").toUpperCase();
+            const dateRaw = v.attackdate || v.discovered || "";
+            const secteur = v.activity && v.activity.toLowerCase() !== "not found" ? v.activity : "";
+            outputFeed.push({ target, hacker: group, time: dateRaw, details: buildRecap(target, group, secteur, true, false), country: "FR" });
+            count++;
         }
-    } catch (e) {
-        console.log(`Note: Échec Source 3 -> ${e.message}`);
+        console.log(`OK: ${count} éléments France récupérés depuis Source 3.`);
     }
 
-    // ==========================================
-    // CUMUL - ETAPE 4 : SOURCE 4 (RansomLook - tracker indépendant, posts récents)
-    // ==========================================
-    console.log(`Connexion Source 4 : ${RANSOMLOOK_API}`);
-    try {
-        const res4 = await fetch(RANSOMLOOK_API, FETCH_HEADERS);
-        if (res4.status === 200) {
-            let posts = await res4.json();
-            if (Array.isArray(posts)) {
-                posts.sort((a, b) => (b.discovered || "").localeCompare(a.discovered || ""));
-
-                let countSource4 = 0;
-                for (const post of posts) {
-                    const dateRaw = post.discovered || "";
-                    if (!isRecent(dateRaw)) continue;
-
-                    const title = sanitizeText(post.post_title || post.victim || "Cible Inconnue");
-                    const group = (post.group_name || "unknown").toUpperCase();
-
-                    outputFeed.push({
-                        target: title,
-                        hacker: group,
-                        time: dateRaw,
-                        details: buildRecap(title, group, "", false)
-                    });
-                    countSource4++;
-                }
-                console.log(`OK: ${countSource4} éléments (< ${MAX_AGE_HOURS}h) chargés depuis Source 4.`);
-            }
-        } else {
-            console.log(`Note: Source 4 a répondu avec le statut ${res4.status}`);
+    // ---------- SOURCE 4 : Ransomware.live API - victimes récentes (monde) ----------
+    console.log(`Connexion Source 4 : ${RANSOMLIVE_API_RECENT}`);
+    const s4 = await safeFetchJson(RANSOMLIVE_API_RECENT, "Source 4 (Ransomware.live recentvictims)");
+    if (Array.isArray(s4)) {
+        let count = 0;
+        for (const v of s4) {
+            const target = sanitizeText(v.victim || v.post_title || "Cible Inconnue");
+            const group = (v.group || v.group_name || "unknown").toUpperCase();
+            const dateRaw = v.attackdate || v.discovered || "";
+            const isFR = v.country === "FR";
+            const secteur = v.activity && v.activity.toLowerCase() !== "not found" ? v.activity : "";
+            outputFeed.push({
+                target, hacker: group, time: dateRaw,
+                details: buildRecap(target, group, secteur, isFR, false),
+                ...(isFR ? { country: "FR" } : {})
+            });
+            count++;
         }
-    } catch (e) {
-        console.log(`Note: Échec Source 4 -> ${e.message}`);
+        console.log(`OK: ${count} éléments récupérés depuis Source 4.`);
     }
 
-    // ==========================================
-    // FUSION, PRIORISATION FRANCE, TRI CHRONOLOGIQUE ET DEDUPLICATION
-    // ==========================================
+    // ---------- SOURCE 5 : Ransomware.live API - cyberattaques presse (data leaks / hacking) ----------
+    console.log(`Connexion Source 5 : ${RANSOMLIVE_API_PRESS}`);
+    const s5 = await safeFetchJson(RANSOMLIVE_API_PRESS, "Source 5 (Ransomware.live press)");
+    if (Array.isArray(s5)) {
+        let count = 0;
+        for (const item of s5) {
+            const target = sanitizeText(item.victim || item.title || item.post_title || "Cible Inconnue");
+            const group = (item.group || item.group_name || item.source || "INCONNU").toString().toUpperCase();
+            const dateRaw = item.date || item.discovered || item.attackdate || "";
+            outputFeed.push({ target, hacker: group, time: dateRaw, details: buildRecap(target, group, "", false, true) });
+            count++;
+        }
+        console.log(`OK: ${count} éléments récupérés depuis Source 5.`);
+    }
+
+    // ---------- SOURCE 6 : RansomLook ----------
+    console.log(`Connexion Source 6 : ${RANSOMLOOK_API}`);
+    const s6 = await safeFetchJson(RANSOMLOOK_API, "Source 6 (RansomLook)");
+    if (Array.isArray(s6)) {
+        let count = 0;
+        for (const post of s6) {
+            const title = sanitizeText(post.post_title || post.victim || "Cible Inconnue");
+            const group = (post.group_name || "unknown").toUpperCase();
+            const dateRaw = post.discovered || "";
+            outputFeed.push({ target: title, hacker: group, time: dateRaw, details: buildRecap(title, group, "", false, false) });
+            count++;
+        }
+        console.log(`OK: ${count} éléments récupérés depuis Source 6.`);
+    }
+
     if (outputFeed.length === 0) {
-        console.error(`ERREUR CRITIQUE: Aucune donnée récupérée dans la fenêtre des ${MAX_AGE_HOURS}h.`);
+        console.error("ERREUR CRITIQUE: Aucune donnée récupérée sur l'ensemble des 6 sources.");
         process.exit(1);
     }
 
-    // Priorité : les cibles françaises remontent en tête, puis tri chronologique décroissant
-    outputFeed.sort((a, b) => {
+    console.log(`Total brut cumulé (avant filtre de fraîcheur) : ${outputFeed.length} éléments.`);
+
+    // ==========================================
+    // FILTRE DE FRAÎCHEUR AVEC FILET DE SÉCURITÉ
+    // On vise 7 jours. Si ça laisse trop peu d'alertes (< MIN_ALERTS_EXPECTED),
+    // on élargit automatiquement pour ne jamais publier un flux presque vide.
+    // ==========================================
+    function applyFreshnessFilter(items, windowHours) {
+        return items.filter(it => {
+            const h = ageHours(it.time);
+            // Si la date est absente/imparsable, on garde l'élément (mieux vaut l'afficher
+            // sans certitude d'âge que de perdre une source entière qui a un format différent).
+            if (h === null) return true;
+            return h >= -1 && h <= windowHours; // tolérance -1h pour les décalages d'horloge
+        });
+    }
+
+    let filtered = applyFreshnessFilter(outputFeed, TARGET_WINDOW_HOURS);
+    console.log(`Après filtre ${TARGET_WINDOW_HOURS / 24} jours : ${filtered.length} éléments.`);
+
+    if (filtered.length < MIN_ALERTS_EXPECTED) {
+        console.log(`Filet de sécurité activé : moins de ${MIN_ALERTS_EXPECTED} alertes récentes, élargissement automatique de la fenêtre.`);
+        filtered = applyFreshnessFilter(outputFeed, TARGET_WINDOW_HOURS * 4); // ~28 jours
+        if (filtered.length < MIN_ALERTS_EXPECTED) {
+            // Dernier recours : on prend tout le flux brut cumulé, trié par fraîcheur, sans limite d'âge.
+            console.log("Filet de sécurité niveau 2 : utilisation de l'intégralité du flux cumulé (sans limite d'âge).");
+            filtered = outputFeed;
+        }
+    }
+
+    // ==========================================
+    // PRIORISATION FRANCE + TRI CHRONOLOGIQUE + DEDUPLICATION
+    // ==========================================
+    filtered.sort((a, b) => {
         const aFR = a.country === "FR" ? 1 : 0;
         const bFR = b.country === "FR" ? 1 : 0;
         if (aFR !== bFR) return bFR - aFR;
-        return (b.time || "").localeCompare(a.time || "");
+        const ta = parseDateSafe(a.time) || 0;
+        const tb = parseDateSafe(b.time) || 0;
+        return tb - ta;
     });
 
-    // Déduplication stricte par entreprise (garde la première occurrence, déjà triée)
     const seen = new Set();
     const result = [];
-    for (const item of outputFeed) {
+    for (const item of filtered) {
         const lookupKey = item.target.toLowerCase().trim();
         if (!seen.has(lookupKey)) {
             seen.add(lookupKey);
@@ -235,11 +255,9 @@ async function getCyberFeed() {
         }
     }
 
-    // Aucun plafond arbitraire : tout ce qui est < 72h et dédupliqué est publié.
-    console.log(`Écriture finale dans live-feed.json (${result.length} éléments, toutes < ${MAX_AGE_HOURS}h, France en priorité)...`);
+    console.log(`Écriture finale dans live-feed.json (${result.length} éléments, France en priorité)...`);
     fs.writeFileSync("live-feed.json", JSON.stringify(result, null, 4), 'utf-8');
     console.log("--- PIPELINE NODE.JS MULTI-SOURCE TERMINE ---");
 }
 
 getCyberFeed();
-                    
