@@ -234,14 +234,14 @@ async function getCyberFeed() {
     }
 
     // ==========================================
-    // PRIORISATION FRANCE + TRI CHRONOLOGIQUE + DEDUPLICATION
+    // TRI CHRONOLOGIQUE (le plus récent en premier) + LÉGER BOOST FRANCE
+    // Le boost ne fait remonter une alerte France que si elle est à moins de 6h
+    // de la plus fraîche du flux — elle ne peut plus masquer des alertes bien plus récentes.
     // ==========================================
+    const FRANCE_BOOST_MS = 6 * 3600 * 1000;
     filtered.sort((a, b) => {
-        const aFR = a.country === "FR" ? 1 : 0;
-        const bFR = b.country === "FR" ? 1 : 0;
-        if (aFR !== bFR) return bFR - aFR;
-        const ta = parseDateSafe(a.time) || 0;
-        const tb = parseDateSafe(b.time) || 0;
+        const ta = (parseDateSafe(a.time) || 0) + (a.country === "FR" ? FRANCE_BOOST_MS : 0);
+        const tb = (parseDateSafe(b.time) || 0) + (b.country === "FR" ? FRANCE_BOOST_MS : 0);
         return tb - ta;
     });
 
@@ -261,3 +261,4 @@ async function getCyberFeed() {
 }
 
 getCyberFeed();
+            
