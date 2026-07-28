@@ -261,4 +261,3 @@ async function getCyberFeed() {
 }
 
 getCyberFeed();
-            
