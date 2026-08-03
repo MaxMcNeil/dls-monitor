@@ -1,9 +1,21 @@
 [
     {
+        "target": "PCL Holding",
+        "hacker": "RANSOMHOUSE",
+        "time": "2026-08-03 13:55:47.641352",
+        "details": "🚨 RANSOMHOUSE revendique une intrusion chez PCL Holding et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+    },
+    {
+        "target": "Service Electric",
+        "hacker": "QILIN",
+        "time": "2026-08-03T13:24:57.828343+00:00",
+        "details": "QILIN frappe Service Electric : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
+    },
+    {
         "target": "setic-pourtier.com",
         "hacker": "LOCKBIT5",
         "time": "2026-08-03T05:05:49.344405+00:00",
-        "details": "🇫🇷 setic-pourtier.com (secteur Other) visée en France : LOCKBIT5 revendique l'intrusion et menace de divulguer les données volées.",
+        "details": "🇫🇷 LOCKBIT5 s'en prend à une cible française : setic-pourtier.com (secteur Other) accusée d'avoir eu ses données volées et menacée de publication.",
         "country": "FR"
     },
     {
@@ -16,13 +28,25 @@
         "target": "Hans & Jos. Kronenberg GmbH",
         "hacker": "PAYLOAD",
         "time": "2026-08-03T04:54:18.615437+00:00",
-        "details": "🚨 PAYLOAD revendique une intrusion chez Hans & Jos. Kronenberg GmbH et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "Chantage numérique en cours : PAYLOAD affirme avoir infiltré Hans & Jos. Kronenberg GmbH et donne un ultimatum avant publication des fichiers."
     },
     {
         "target": "Freedom Claims Management",
         "hacker": "QILIN",
         "time": "2026-08-03T03:56:07.321136+00:00",
-        "details": "🚨 QILIN revendique une intrusion chez Freedom Claims Management et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "Chantage numérique en cours : QILIN affirme avoir infiltré Freedom Claims Management et donne un ultimatum avant publication des fichiers."
+    },
+    {
+        "target": "Albers Mechanical Contractors",
+        "hacker": "AKIRA",
+        "time": "2026-08-03T00:00:00+00:00",
+        "details": "Nouvelle victime pour AKIRA : Albers Mechanical Contractors accusée d'avoir été totalement compromise, données confidentielles prises en otage."
+    },
+    {
+        "target": "Belasco Electric",
+        "hacker": "AKIRA",
+        "time": "2026-08-03T00:00:00+00:00",
+        "details": "🚨 AKIRA revendique une intrusion chez Belasco Electric et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
     },
     {
         "target": "Mairie de Drancy",
@@ -35,26 +59,26 @@
         "target": "www.prohealth.sg",
         "hacker": "KRYBIT",
         "time": "2026-08-02T21:58:56.524335+00:00",
-        "details": "🚨 KRYBIT revendique une intrusion chez www.prohealth.sg et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "Nouvelle victime pour KRYBIT : www.prohealth.sg accusée d'avoir été totalement compromise, données confidentielles prises en otage."
     },
     {
         "target": "Asset Flooring Group Australia",
         "hacker": "QILIN",
         "time": "2026-08-02T20:25:59.410259+00:00",
-        "details": "Chantage numérique en cours : QILIN affirme avoir infiltré Asset Flooring Group Australia et donne un ultimatum avant publication des fichiers."
+        "details": "Asset Flooring Group Australia dans le viseur de QILIN : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
     },
     {
         "target": "www.ville-rinxent.fr",
         "hacker": "KRYBIT",
         "time": "2026-08-02T13:55:27.350449+00:00",
-        "details": "🇫🇷 Chantage numérique sur le sol français : www.ville-rinxent.fr (secteur Government & Defense) au cœur d'une revendication de KRYBIT.",
+        "details": "🇫🇷 KRYBIT s'en prend à une cible française : www.ville-rinxent.fr (secteur Government & Defense) accusée d'avoir eu ses données volées et menacée de publication.",
         "country": "FR"
     },
     {
         "target": "www.dcpartner.co.za",
         "hacker": "KRYBIT",
         "time": "2026-08-02T14:24:46.312294+00:00",
-        "details": "KRYBIT frappe www.dcpartner.co.za : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
+        "details": "www.dcpartner.co.za dans le viseur de KRYBIT : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
     },
     {
         "target": "nigeria.asa-international.com",
@@ -78,98 +102,98 @@
         "target": "www.buzztrading104.co.za",
         "hacker": "KRYBIT",
         "time": "2026-08-02T13:26:04.268189+00:00",
-        "details": "🚨 KRYBIT revendique une intrusion chez www.buzztrading104.co.za et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "www.buzztrading104.co.za dans le viseur de KRYBIT : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
     },
     {
         "target": "Wire Products",
         "hacker": "QILIN",
         "time": "2026-08-02T12:30:09.985263+00:00",
-        "details": "🚨 QILIN revendique une intrusion chez Wire Products et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "Chantage numérique en cours : QILIN affirme avoir infiltré Wire Products et donne un ultimatum avant publication des fichiers."
     },
     {
         "target": "Questel SAS",
         "hacker": "SHINYHUNTERS",
         "time": "2026-08-02T00:00:00+00:00",
-        "details": "🇫🇷 Alerte France : SHINYHUNTERS affirme avoir compromis Questel SAS, et exige une rançon sous peine de fuite massive.",
+        "details": "🇫🇷 Questel SAS visée en France : SHINYHUNTERS revendique l'intrusion et menace de divulguer les données volées.",
         "country": "FR"
     },
     {
         "target": "Encore Enterprises, Inc.",
         "hacker": "CRPXO",
         "time": "2026-08-02T03:50:22.093166+00:00",
-        "details": "🚨 CRPXO revendique une intrusion chez Encore Enterprises, Inc. et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "CRPXO frappe Encore Enterprises, Inc. : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
     },
     {
         "target": "ecfa.org",
         "hacker": "INCRANSOM",
         "time": "2026-08-02T00:01:00+00:00",
-        "details": "Nouvelle victime pour INCRANSOM : ecfa.org accusée d'avoir été totalement compromise, données confidentielles prises en otage."
+        "details": "🚨 INCRANSOM revendique une intrusion chez ecfa.org et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
     },
     {
         "target": "INTERTRUST AUSTRALIA PTY LTD",
         "hacker": "QILIN",
         "time": "2026-08-02T00:00:00+00:00",
-        "details": "INTERTRUST AUSTRALIA PTY LTD dans le viseur de QILIN : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
+        "details": "QILIN frappe INTERTRUST AUSTRALIA PTY LTD : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
     },
     {
         "target": "Magyar Államkincstár",
         "hacker": "INCONNU",
         "time": "2026-08-02",
-        "details": "Magyar Államkincstár au cœur d'un signalement presse pour une possible violation de données liée à INCONNU."
+        "details": "📰 Fuite de données confirmée par la presse : Magyar Államkincstár aurait été compromise, incident attribué à INCONNU."
     },
     {
         "target": "The Butcher Brothers",
         "hacker": "PLAY",
         "time": "2026-08-01T19:04:28.690890+00:00",
-        "details": "The Butcher Brothers dans le viseur de PLAY : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
+        "details": "PLAY frappe The Butcher Brothers : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
     },
     {
         "target": "Sigma Plastics Group",
         "hacker": "PLAY",
         "time": "2026-08-01T19:03:53.538371+00:00",
-        "details": "Nouvelle victime pour PLAY : Sigma Plastics Group accusée d'avoir été totalement compromise, données confidentielles prises en otage."
+        "details": "🚨 PLAY revendique une intrusion chez Sigma Plastics Group et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
     },
     {
         "target": "Cambridge Management",
         "hacker": "PLAY",
         "time": "2026-08-01T19:03:17.433238+00:00",
-        "details": "PLAY frappe Cambridge Management : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
+        "details": "🚨 PLAY revendique une intrusion chez Cambridge Management et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
     },
     {
         "target": "quantinuum.com",
         "hacker": "INCRANSOM",
         "time": "2026-08-01T16:00:00+00:00",
-        "details": "INCRANSOM frappe quantinuum.com : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
+        "details": "quantinuum.com dans le viseur de INCRANSOM : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
     },
     {
         "target": "Vernon & Waldrep",
         "hacker": "GLOBAL SECRET GROUP",
         "time": "2026-08-01T15:50:56.534610+00:00",
-        "details": "Chantage numérique en cours : GLOBAL SECRET GROUP affirme avoir infiltré Vernon & Waldrep et donne un ultimatum avant publication des fichiers."
+        "details": "🚨 GLOBAL SECRET GROUP revendique une intrusion chez Vernon & Waldrep et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
     },
     {
         "target": "The Saturday Evening Post",
         "hacker": "QILIN",
         "time": "2026-08-01T13:53:42.307316+00:00",
-        "details": "Nouvelle victime pour QILIN : The Saturday Evening Post accusée d'avoir été totalement compromise, données confidentielles prises en otage."
+        "details": "The Saturday Evening Post dans le viseur de QILIN : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
     },
     {
         "target": "Commercial Furniture Interiors",
         "hacker": "QILIN",
         "time": "2026-08-01T13:52:31.199624+00:00",
-        "details": "QILIN frappe Commercial Furniture Interiors : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
+        "details": "Chantage numérique en cours : QILIN affirme avoir infiltré Commercial Furniture Interiors et donne un ultimatum avant publication des fichiers."
     },
     {
         "target": "Dienst Pack Systems",
         "hacker": "QILIN",
         "time": "2026-08-01T13:51:48.791535+00:00",
-        "details": "Dienst Pack Systems dans le viseur de QILIN : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
+        "details": "QILIN frappe Dienst Pack Systems : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
     },
     {
         "target": "Ceragres",
         "hacker": "QILIN",
         "time": "2026-08-01T13:51:07.061395+00:00",
-        "details": "🚨 QILIN revendique une intrusion chez Ceragres et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "QILIN frappe Ceragres : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
     },
     {
         "target": "Pointe Property Group",
@@ -187,13 +211,13 @@
         "target": "CEN and Cenelec",
         "hacker": "COINBASECARTEL",
         "time": "2026-08-01T05:30:06.912961+00:00",
-        "details": "Chantage numérique en cours : COINBASECARTEL affirme avoir infiltré CEN and Cenelec et donne un ultimatum avant publication des fichiers."
+        "details": "🚨 COINBASECARTEL revendique une intrusion chez CEN and Cenelec et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
     },
     {
         "target": "MIM Fertility",
         "hacker": "COINBASECARTEL",
         "time": "2026-08-01T05:29:29.374407+00:00",
-        "details": "MIM Fertility dans le viseur de COINBASECARTEL : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
+        "details": "🚨 COINBASECARTEL revendique une intrusion chez MIM Fertility et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
     },
     {
         "target": "M. B. Kahn Construction Co.",
@@ -205,37 +229,37 @@
         "target": "Xs Cad",
         "hacker": "COINBASECARTEL",
         "time": "2026-08-01T05:28:15.944053+00:00",
-        "details": "🚨 COINBASECARTEL revendique une intrusion chez Xs Cad et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
-    },
-    {
-        "target": "Lumenis Ltd.",
-        "hacker": "SHINYHUNTERS",
-        "time": "2026-08-01T00:00:00+00:00",
-        "details": "🚨 SHINYHUNTERS revendique une intrusion chez Lumenis Ltd. et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "Chantage numérique en cours : COINBASECARTEL affirme avoir infiltré Xs Cad et donne un ultimatum avant publication des fichiers."
     },
     {
         "target": "Alcon Inc.",
         "hacker": "SHINYHUNTERS",
         "time": "2026-08-01T00:00:00+00:00",
-        "details": "SHINYHUNTERS frappe Alcon Inc. : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
+        "details": "Nouvelle victime pour SHINYHUNTERS : Alcon Inc. accusée d'avoir été totalement compromise, données confidentielles prises en otage."
+    },
+    {
+        "target": "Lumenis Ltd.",
+        "hacker": "SHINYHUNTERS",
+        "time": "2026-08-01T00:00:00+00:00",
+        "details": "Lumenis Ltd. dans le viseur de SHINYHUNTERS : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
     },
     {
         "target": "Schreiner Trockenbau GmbH",
         "hacker": "QILIN",
         "time": "2026-08-01T00:00:00+00:00",
-        "details": "🚨 QILIN revendique une intrusion chez Schreiner Trockenbau GmbH et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "Nouvelle victime pour QILIN : Schreiner Trockenbau GmbH accusée d'avoir été totalement compromise, données confidentielles prises en otage."
     },
     {
         "target": "MTCO (Mahmoud Altaheni & Partners Trading Co)",
         "hacker": "GAMMAX",
         "time": "2026-08-01T00:00:00+00:00",
-        "details": "MTCO (Mahmoud Altaheni & Partners Trading Co) dans le viseur de GAMMAX : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
+        "details": "Nouvelle victime pour GAMMAX : MTCO (Mahmoud Altaheni & Partners Trading Co) accusée d'avoir été totalement compromise, données confidentielles prises en otage."
     },
     {
         "target": "Metro de Panamá",
         "hacker": "INCONNU",
         "time": "2026-08-01",
-        "details": "📰 Fuite de données confirmée par la presse : Metro de Panamá aurait été compromise, incident attribué à INCONNU."
+        "details": "Metro de Panamá au cœur d'un signalement presse pour une possible violation de données liée à INCONNU."
     },
     {
         "target": "Uttarakhand",
@@ -247,7 +271,7 @@
         "target": "KUVEYT TURK",
         "hacker": "CRPXO",
         "time": "2026-07-31T23:52:12.032501+00:00",
-        "details": "🚨 CRPXO revendique une intrusion chez KUVEYT TURK et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "Chantage numérique en cours : CRPXO affirme avoir infiltré KUVEYT TURK et donne un ultimatum avant publication des fichiers."
     },
     {
         "target": "FINANSBANK",
@@ -265,37 +289,37 @@
         "target": "THY",
         "hacker": "CRPXO",
         "time": "2026-07-31T23:51:42.240339+00:00",
-        "details": "Nouvelle victime pour CRPXO : THY accusée d'avoir été totalement compromise, données confidentielles prises en otage."
+        "details": "🚨 CRPXO revendique une intrusion chez THY et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
     },
     {
         "target": "JOHNSON & JOHNSON",
         "hacker": "CRPXO",
         "time": "2026-07-31T23:51:22.216517+00:00",
-        "details": "JOHNSON & JOHNSON dans le viseur de CRPXO : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
+        "details": "Chantage numérique en cours : CRPXO affirme avoir infiltré JOHNSON & JOHNSON et donne un ultimatum avant publication des fichiers."
     },
     {
         "target": "DOĞAN HOLDİNG",
         "hacker": "CRPXO",
         "time": "2026-07-31T23:51:12.928065+00:00",
-        "details": "🚨 CRPXO revendique une intrusion chez DOĞAN HOLDİNG et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "Nouvelle victime pour CRPXO : DOĞAN HOLDİNG accusée d'avoir été totalement compromise, données confidentielles prises en otage."
     },
     {
         "target": "ANADOLU SİGORTA",
         "hacker": "CRPXO",
         "time": "2026-07-31T23:51:01.891534+00:00",
-        "details": "🚨 CRPXO revendique une intrusion chez ANADOLU SİGORTA et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "Chantage numérique en cours : CRPXO affirme avoir infiltré ANADOLU SİGORTA et donne un ultimatum avant publication des fichiers."
     },
     {
         "target": "HYUNDAI",
         "hacker": "CRPXO",
         "time": "2026-07-31T23:50:41.697192+00:00",
-        "details": "🚨 CRPXO revendique une intrusion chez HYUNDAI et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "Nouvelle victime pour CRPXO : HYUNDAI accusée d'avoir été totalement compromise, données confidentielles prises en otage."
     },
     {
         "target": "ASELSAN",
         "hacker": "CRPXO",
         "time": "2026-07-31T23:50:32.347049+00:00",
-        "details": "Chantage numérique en cours : CRPXO affirme avoir infiltré ASELSAN et donne un ultimatum avant publication des fichiers."
+        "details": "ASELSAN dans le viseur de CRPXO : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
     },
     {
         "target": "A101",
@@ -307,25 +331,25 @@
         "target": "Community Management Associates",
         "hacker": "QILIN",
         "time": "2026-07-31T19:00:14.758373+00:00",
-        "details": "Chantage numérique en cours : QILIN affirme avoir infiltré Community Management Associates et donne un ultimatum avant publication des fichiers."
+        "details": "QILIN frappe Community Management Associates : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
     },
     {
         "target": "Lamont Pridmore",
         "hacker": "DRAGONFORCE",
         "time": "2026-07-31T15:36:13.171267+00:00",
-        "details": "🚨 DRAGONFORCE revendique une intrusion chez Lamont Pridmore et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "Chantage numérique en cours : DRAGONFORCE affirme avoir infiltré Lamont Pridmore et donne un ultimatum avant publication des fichiers."
     },
     {
         "target": "Gardiner Family Chiropractic",
         "hacker": "INTERLOCK",
         "time": "2026-07-31T14:55:45.005441+00:00",
-        "details": "Gardiner Family Chiropractic dans le viseur de INTERLOCK : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
+        "details": "🚨 INTERLOCK revendique une intrusion chez Gardiner Family Chiropractic et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
     },
     {
         "target": "BLUEVISTALLC.COM",
         "hacker": "CLOP",
         "time": "2026-07-31T12:59:49.227747+00:00",
-        "details": "Chantage numérique en cours : CLOP affirme avoir infiltré BLUEVISTALLC.COM et donne un ultimatum avant publication des fichiers."
+        "details": "BLUEVISTALLC.COM dans le viseur de CLOP : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
     },
     {
         "target": "Okovolt Solartechnik",
@@ -337,13 +361,13 @@
         "target": "Total Auto Business Solutions",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T12:42:14+00:00",
-        "details": "Chantage numérique en cours : THEGENTLEMEN affirme avoir infiltré Total Auto Business Solutions et donne un ultimatum avant publication des fichiers."
+        "details": "THEGENTLEMEN frappe Total Auto Business Solutions : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
     },
     {
         "target": "Chemco Systems",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T12:39:55+00:00",
-        "details": "THEGENTLEMEN frappe Chemco Systems : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
+        "details": "🚨 THEGENTLEMEN revendique une intrusion chez Chemco Systems et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
     },
     {
         "target": "World Wide Fittings",
@@ -355,37 +379,37 @@
         "target": "Municipalidad de San Luis",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T12:34:50+00:00",
-        "details": "Chantage numérique en cours : THEGENTLEMEN affirme avoir infiltré Municipalidad de San Luis et donne un ultimatum avant publication des fichiers."
+        "details": "Nouvelle victime pour THEGENTLEMEN : Municipalidad de San Luis accusée d'avoir été totalement compromise, données confidentielles prises en otage."
     },
     {
         "target": "The Dcoop",
         "hacker": "QILIN",
         "time": "2026-07-31T12:33:26.372739+00:00",
-        "details": "Nouvelle victime pour QILIN : The Dcoop accusée d'avoir été totalement compromise, données confidentielles prises en otage."
+        "details": "🚨 QILIN revendique une intrusion chez The Dcoop et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
     },
     {
         "target": "Peachtree Group",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T12:31:29+00:00",
-        "details": "Nouvelle victime pour THEGENTLEMEN : Peachtree Group accusée d'avoir été totalement compromise, données confidentielles prises en otage."
+        "details": "THEGENTLEMEN frappe Peachtree Group : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
     },
     {
         "target": "Known",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T12:29:48+00:00",
-        "details": "🚨 THEGENTLEMEN revendique une intrusion chez Known et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "THEGENTLEMEN frappe Known : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
     },
     {
         "target": "Paula Fish",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T12:28:33+00:00",
-        "details": "THEGENTLEMEN frappe Paula Fish : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
+        "details": "Chantage numérique en cours : THEGENTLEMEN affirme avoir infiltré Paula Fish et donne un ultimatum avant publication des fichiers."
     },
     {
         "target": "Amicell",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T12:26:35+00:00",
-        "details": "THEGENTLEMEN frappe Amicell : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
+        "details": "Amicell dans le viseur de THEGENTLEMEN : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
     },
     {
         "target": "Efrata College of Education",
@@ -397,43 +421,43 @@
         "target": "The Municipal Chamber of Serra",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T12:16:38+00:00",
-        "details": "THEGENTLEMEN frappe The Municipal Chamber of Serra : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
+        "details": "🚨 THEGENTLEMEN revendique une intrusion chez The Municipal Chamber of Serra et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
     },
     {
         "target": "Orsima",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T12:14:19+00:00",
-        "details": "Nouvelle victime pour THEGENTLEMEN : Orsima accusée d'avoir été totalement compromise, données confidentielles prises en otage."
+        "details": "🚨 THEGENTLEMEN revendique une intrusion chez Orsima et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
     },
     {
         "target": "Clear Vision Signs",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T12:13:18+00:00",
-        "details": "THEGENTLEMEN frappe Clear Vision Signs : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
+        "details": "Chantage numérique en cours : THEGENTLEMEN affirme avoir infiltré Clear Vision Signs et donne un ultimatum avant publication des fichiers."
     },
     {
         "target": "Precision Concrete Pumping",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T12:11:55+00:00",
-        "details": "Chantage numérique en cours : THEGENTLEMEN affirme avoir infiltré Precision Concrete Pumping et donne un ultimatum avant publication des fichiers."
+        "details": "🚨 THEGENTLEMEN revendique une intrusion chez Precision Concrete Pumping et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
     },
     {
         "target": "Bater",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T12:09:50+00:00",
-        "details": "THEGENTLEMEN frappe Bater : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
+        "details": "Bater dans le viseur de THEGENTLEMEN : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
     },
     {
         "target": "Premier Fiduciary",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T12:08:29+00:00",
-        "details": "Chantage numérique en cours : THEGENTLEMEN affirme avoir infiltré Premier Fiduciary et donne un ultimatum avant publication des fichiers."
+        "details": "Nouvelle victime pour THEGENTLEMEN : Premier Fiduciary accusée d'avoir été totalement compromise, données confidentielles prises en otage."
     },
     {
         "target": "Preferred",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T12:07:16+00:00",
-        "details": "🚨 THEGENTLEMEN revendique une intrusion chez Preferred et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "THEGENTLEMEN frappe Preferred : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
     },
     {
         "target": "Betz Industries",
@@ -445,37 +469,37 @@
         "target": "Partition Specialties",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T12:04:54+00:00",
-        "details": "Partition Specialties dans le viseur de THEGENTLEMEN : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
+        "details": "Chantage numérique en cours : THEGENTLEMEN affirme avoir infiltré Partition Specialties et donne un ultimatum avant publication des fichiers."
     },
     {
         "target": "CRB group",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T12:02:45+00:00",
-        "details": "🚨 THEGENTLEMEN revendique une intrusion chez CRB group et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "Chantage numérique en cours : THEGENTLEMEN affirme avoir infiltré CRB group et donne un ultimatum avant publication des fichiers."
     },
     {
         "target": "Hutch Paving",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T12:01:29+00:00",
-        "details": "Hutch Paving dans le viseur de THEGENTLEMEN : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
+        "details": "🚨 THEGENTLEMEN revendique une intrusion chez Hutch Paving et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
     },
     {
         "target": "OHK Energy",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T11:59:42+00:00",
-        "details": "OHK Energy dans le viseur de THEGENTLEMEN : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
+        "details": "THEGENTLEMEN frappe OHK Energy : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
     },
     {
         "target": "CFS",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T11:55:17+00:00",
-        "details": "🚨 THEGENTLEMEN revendique une intrusion chez CFS et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "CFS dans le viseur de THEGENTLEMEN : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
     },
     {
         "target": "Acosta Sons",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T11:47:43+00:00",
-        "details": "🚨 THEGENTLEMEN revendique une intrusion chez Acosta Sons et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "Acosta Sons dans le viseur de THEGENTLEMEN : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
     },
     {
         "target": "Saturn Industries",
@@ -487,7 +511,7 @@
         "target": "Kosh Innovations",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T11:39:03+00:00",
-        "details": "THEGENTLEMEN frappe Kosh Innovations : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
+        "details": "Kosh Innovations dans le viseur de THEGENTLEMEN : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
     },
     {
         "target": "Krafman",
@@ -499,13 +523,13 @@
         "target": "Salama Medicals Distributors Private",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T11:32:13+00:00",
-        "details": "🚨 THEGENTLEMEN revendique une intrusion chez Salama Medicals Distributors Private et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "Salama Medicals Distributors Private dans le viseur de THEGENTLEMEN : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
     },
     {
         "target": "Salem Saleh Babgi",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T11:26:19+00:00",
-        "details": "Chantage numérique en cours : THEGENTLEMEN affirme avoir infiltré Salem Saleh Babgi et donne un ultimatum avant publication des fichiers."
+        "details": "Nouvelle victime pour THEGENTLEMEN : Salem Saleh Babgi accusée d'avoir été totalement compromise, données confidentielles prises en otage."
     },
     {
         "target": "Additive Manufacturing",
@@ -517,7 +541,7 @@
         "target": "Pertamina",
         "hacker": "THEGENTLEMEN",
         "time": "2026-07-31T11:21:11+00:00",
-        "details": "THEGENTLEMEN frappe Pertamina : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
+        "details": "Nouvelle victime pour THEGENTLEMEN : Pertamina accusée d'avoir été totalement compromise, données confidentielles prises en otage."
     },
     {
         "target": "Kenaitze Indian Tribe",
@@ -529,7 +553,7 @@
         "target": "Stewart Belland & Associates Inc.",
         "hacker": "CMDORGANIZATION",
         "time": "2026-07-31T10:20:14.634536+00:00",
-        "details": "Chantage numérique en cours : CMDORGANIZATION affirme avoir infiltré Stewart Belland & Associates Inc. et donne un ultimatum avant publication des fichiers."
+        "details": "Nouvelle victime pour CMDORGANIZATION : Stewart Belland & Associates Inc. accusée d'avoir été totalement compromise, données confidentielles prises en otage."
     },
     {
         "target": "Hawaii Family Dental",
@@ -547,43 +571,43 @@
         "target": "Rapid City",
         "hacker": "INCONNU",
         "time": "2026-07-31",
-        "details": "Alerte médiatique : une cyberattaque visant Rapid City fait la une, INCONNU pointé du doigt."
+        "details": "Rapid City au cœur d'un signalement presse pour une possible violation de données liée à INCONNU."
     },
     {
         "target": "Amgen",
         "hacker": "INCONNU",
         "time": "2026-07-31",
-        "details": "Amgen au cœur d'un signalement presse pour une possible violation de données liée à INCONNU."
+        "details": "📰 Fuite de données confirmée par la presse : Amgen aurait été compromise, incident attribué à INCONNU."
     },
     {
         "target": "Université Masaryk",
         "hacker": "INCONNU",
         "time": "2026-07-31",
-        "details": "Université Masaryk au cœur d'un signalement presse pour une possible violation de données liée à INCONNU."
+        "details": "Alerte médiatique : une cyberattaque visant Université Masaryk fait la une, INCONNU pointé du doigt."
     },
     {
         "target": "Oldelval",
         "hacker": "INCONNU",
         "time": "2026-07-31",
-        "details": "Alerte médiatique : une cyberattaque visant Oldelval fait la une, INCONNU pointé du doigt."
+        "details": "Oldelval au cœur d'un signalement presse pour une possible violation de données liée à INCONNU."
     },
     {
         "target": "Audio Precision, Inc",
         "hacker": "QILIN",
         "time": "2026-07-30T20:29:01.467875+00:00",
-        "details": "Audio Precision, Inc dans le viseur de QILIN : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
+        "details": "Nouvelle victime pour QILIN : Audio Precision, Inc accusée d'avoir été totalement compromise, données confidentielles prises en otage."
     },
     {
         "target": "AguAseo",
         "hacker": "GAMMAX",
         "time": "2026-07-30T14:28:59+00:00",
-        "details": "AguAseo dans le viseur de GAMMAX : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
+        "details": "Nouvelle victime pour GAMMAX : AguAseo accusée d'avoir été totalement compromise, données confidentielles prises en otage."
     },
     {
         "target": "Contact Group",
         "hacker": "CMDORGANIZATION",
         "time": "2026-07-30T14:20:16.545269+00:00",
-        "details": "CMDORGANIZATION frappe Contact Group : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
+        "details": "Contact Group dans le viseur de CMDORGANIZATION : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
     },
     {
         "target": "Las Cenizas",
@@ -613,49 +637,31 @@
         "target": "Rondout Electric",
         "hacker": "CMDORGANIZATION",
         "time": "2026-07-30T09:20:17.355107+00:00",
-        "details": "CMDORGANIZATION frappe Rondout Electric : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
+        "details": "Nouvelle victime pour CMDORGANIZATION : Rondout Electric accusée d'avoir été totalement compromise, données confidentielles prises en otage."
     },
     {
         "target": "Byonyks",
         "hacker": "QILIN",
         "time": "2026-07-30T08:59:56.697604+00:00",
-        "details": "🚨 QILIN revendique une intrusion chez Byonyks et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "Nouvelle victime pour QILIN : Byonyks accusée d'avoir été totalement compromise, données confidentielles prises en otage."
     },
     {
         "target": "Prenisac",
         "hacker": "QILIN",
         "time": "2026-07-30T08:59:37.382585+00:00",
-        "details": "🚨 QILIN revendique une intrusion chez Prenisac et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "QILIN frappe Prenisac : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
     },
     {
         "target": "Excel Consultores",
         "hacker": "QILIN",
         "time": "2026-07-30T08:59:17.982245+00:00",
-        "details": "🚨 QILIN revendique une intrusion chez Excel Consultores et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
+        "details": "Chantage numérique en cours : QILIN affirme avoir infiltré Excel Consultores et donne un ultimatum avant publication des fichiers."
     },
     {
         "target": "Affinity Capital",
         "hacker": "QILIN",
         "time": "2026-07-30T08:58:36.437641+00:00",
         "details": "Affinity Capital dans le viseur de QILIN : les cybercriminels affirment détenir des données sensibles et menacent de tout diffuser sur le dark web."
-    },
-    {
-        "target": "Siam Stabilizers and Chemicals Co., Ltd. / SSC",
-        "hacker": "GUNRA",
-        "time": "2026-07-30T08:25:09.593523+00:00",
-        "details": "GUNRA frappe Siam Stabilizers and Chemicals Co., Ltd. / SSC : vol de données revendiqué, fuite imminente sur le dark web si aucune rançon n'est versée."
-    },
-    {
-        "target": "servitelco",
-        "hacker": "QILIN",
-        "time": "2026-07-30T07:58:47.699099+00:00",
-        "details": "🚨 QILIN revendique une intrusion chez servitelco et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
-    },
-    {
-        "target": "Orimar",
-        "hacker": "QILIN",
-        "time": "2026-07-30T07:58:11.169560+00:00",
-        "details": "🚨 QILIN revendique une intrusion chez Orimar et menace de publier l'intégralité des données volées si la rançon n'est pas payée."
     },
     {
         "target": "Southeastern Oklahoma State University",
@@ -679,14 +685,14 @@
         "target": "Prelys Courtage",
         "hacker": "ANUBIS",
         "time": "2026-07-28T00:57:09.468182+00:00",
-        "details": "🇫🇷 ANUBIS s'en prend à une cible française : Prelys Courtage (secteur Financial Services) accusée d'avoir eu ses données volées et menacée de publication.",
+        "details": "🇫🇷 Alerte France : ANUBIS affirme avoir compromis Prelys Courtage (secteur Financial Services), et exige une rançon sous peine de fuite massive.",
         "country": "FR"
     },
     {
         "target": "Groupe Fenwick",
         "hacker": "QILIN",
         "time": "2026-07-27T18:58:13.034535+00:00",
-        "details": "🇫🇷 Alerte France : QILIN affirme avoir compromis Groupe Fenwick (secteur Manufacturing), et exige une rançon sous peine de fuite massive.",
+        "details": "🇫🇷 QILIN s'en prend à une cible française : Groupe Fenwick (secteur Manufacturing) accusée d'avoir eu ses données volées et menacée de publication.",
         "country": "FR"
     },
     {
@@ -699,13 +705,13 @@
         "target": "CubePilot",
         "hacker": "INCONNU",
         "time": "2026-07-28",
-        "details": "CubePilot au cœur d'un signalement presse pour une possible violation de données liée à INCONNU."
+        "details": "📰 Fuite de données confirmée par la presse : CubePilot aurait été compromise, incident attribué à INCONNU."
     },
     {
         "target": "Hiwin S.r.l.",
         "hacker": "INCONNU",
         "time": "2026-07-28",
-        "details": "Hiwin S.r.l. au cœur d'un signalement presse pour une possible violation de données liée à INCONNU."
+        "details": "Alerte médiatique : une cyberattaque visant Hiwin S.r.l. fait la une, INCONNU pointé du doigt."
     },
     {
         "target": "Mairie de Šumperk",
@@ -714,17 +720,16 @@
         "details": "Mairie de Šumperk au cœur d'un signalement presse pour une possible violation de données liée à INCONNU."
     },
     {
+        "target": "Accesso Technology Group",
+        "hacker": "INCONNU",
+        "time": "2026-07-28",
+        "details": "Alerte médiatique : une cyberattaque visant Accesso Technology Group fait la une, INCONNU pointé du doigt."
+    },
+    {
         "target": "Diffusion de Produits Inoxydables",
         "hacker": "NIGHTSPIRE",
         "time": "2026-07-27T17:54:49.916951+00:00",
         "details": "🇫🇷 NIGHTSPIRE s'en prend à une cible française : Diffusion de Produits Inoxydables (secteur Manufacturing) accusée d'avoir eu ses données volées et menacée de publication.",
-        "country": "FR"
-    },
-    {
-        "target": "Savills France",
-        "hacker": "QILIN",
-        "time": "2026-07-27T11:59:02.253716+00:00",
-        "details": "🇫🇷 Chantage numérique sur le sol français : Savills France (secteur Professional Services) au cœur d'une revendication de QILIN.",
         "country": "FR"
     }
 ]
